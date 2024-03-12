@@ -15,5 +15,4 @@ public class Point
     {
         return new Tuple<int, int>(X, Y);
     }
-    
 }

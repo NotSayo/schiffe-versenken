@@ -2,6 +2,10 @@
 
 public class Battleships :IBattleships
 {
+    public List<IPlayer> Players { get; }
+    public IPlayer ActivePlayer { get; }
+    public EPhase GamePhase { get; }
+
     public void CreateGame()
     {
         throw new NotImplementedException();
@@ -12,7 +16,13 @@ public class Battleships :IBattleships
         throw new NotImplementedException();
     }
 
-    public void Move()
+    public void Attack()
+    {
+        throw new NotImplementedException();
+    }
+    
+
+    public void SetShips(IPlayer player, List<IShip> ships)
     {
         throw new NotImplementedException();
     }

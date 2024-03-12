@@ -2,7 +2,7 @@
 
 public class Field :IField
 {
-    public Point[,] _Field { get; set; }
+    public Point[,] FieldArr { get; set; }
     public List<IShip> Ships { get; set; }
     public int LeftHP { get; set; }
     public int LeftShips { get; set; }
@@ -11,14 +11,14 @@ public class Field :IField
     {
         CalculateLeftShips();
         CalculateLeftHP();
-        _Field = new Point[10, 10];
+        FieldArr = new Point[10, 10];
         for (int i = 0; i < 10; i++)
         {
             for (int j = 0; j < 10; j++)
             {
-                _Field[i, j] = new Point();
-                _Field[i, j].X = i;
-                _Field[i, j].Y = j;
+                FieldArr[i, j] = new Point();
+                FieldArr[i, j].X = i;
+                FieldArr[i, j].Y = j;
             }
         }
     }

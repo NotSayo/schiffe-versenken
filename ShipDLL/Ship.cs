@@ -1,6 +1,6 @@
 ﻿namespace ShipDLL;
 
-public interface IShip
+public class Ship : IShip
 {
     public int HP { get; set; }
     public EShip Type { get; set; }

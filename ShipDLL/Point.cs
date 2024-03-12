@@ -2,6 +2,9 @@
 
 
 //TODO Add SetHasShip method
+
+
+
 public class Point
 {
     public EPositionStatus Status { get; set; }
@@ -12,4 +15,5 @@ public class Point
     {
         return new Tuple<int, int>(X, Y);
     }
+    
 }

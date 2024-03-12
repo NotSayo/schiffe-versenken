@@ -2,5 +2,8 @@
 
 public enum EPositionStatus
 {
-    
+    Empty,
+    Ship,
+    Hit,
+    Miss
 }

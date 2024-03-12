@@ -2,5 +2,5 @@
 
 public enum EShip
 {
-    
+    Destroyer,Battleship,CruiseShip,Submarine
 }

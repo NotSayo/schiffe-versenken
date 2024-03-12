@@ -1,9 +1,3 @@
 ﻿namespace ShipDLL;
 
-public enum EPositionStatus
-{
-    Empty,
-    Ship,
-    Hit,
-    Miss
-}
+public enum EPositionStatus { Empty, Ship, Hit, Miss }

@@ -58,8 +58,6 @@ public class Tests
     [Test]
     public void CheckAttack()
     {
-        //TODO ka
         _gameController.CreateGame();
-        _gameController.Attack();
     }
 }

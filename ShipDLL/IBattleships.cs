@@ -10,7 +10,7 @@ public interface IBattleships
     
     
     public void CreateGame();
-    public bool GameOver();
+    public bool GameOver(); 
     public void SetShips(IPlayer player, List<IShip> ships);
     public void ChangeTurns();
 }

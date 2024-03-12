@@ -1,7 +1,66 @@
 ﻿@page "/"
+@using ShipDLL
+@rendermode RenderMode.InteractiveServer
+@attribute [StreamRendering]
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="container-fluid" id="main_Window">
+    <h1>Battle Ships</h1>
+    <div id="Player1Stats">
+        <h2>Player 1</h2>
+        
+    </div>
+    
+    <div id="Player2Stats">
+        <!-- TODO STATS -->
+    </div>
+    
+    <div id="MainBoard">
+        <div class="FieldEntry">
+            @if (game == null)
+            {
+                <div>Loading</div>
+            }
+            else
+            {
+                @for (int i = 0; i < 100; i++)
+                {
+                    <a><div class="FieldPoint"></div></a>
+                }
+                
+                
+            }
+        </div>
+         <div class="FieldEntry">
+             @if (game == null)
+             { 
+                 <div>Loading</div>
+             }
+             else
+             {
+                 @for (int i = 0; i < 100; i++)
+                 {
+                     <a><div class="FieldPoint"></div></a>
+                 }
+             }
+        </div>
+    </div>  
+    
+    <div id="controls">
+            
+    </div>
+    
+</div>
 
-Welcome to your new app.
+
+@code {
+    private Battleships game;
+
+    protected override void OnInitialized()
+    {
+        game = new Battleships();
+    }
+
+
+}

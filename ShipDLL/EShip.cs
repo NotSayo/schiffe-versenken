@@ -1,6 +1,6 @@
 ﻿namespace ShipDLL;
 
-public class Class1
+public enum EShip
 {
-
+    
 }

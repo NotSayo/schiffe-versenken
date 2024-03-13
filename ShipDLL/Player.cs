@@ -2,9 +2,11 @@
 
 public class Player:IPlayer
 {
+    private Battleships Game_Machine = new Battleships();
+    
     public int ID { get; set; }
     public IField Field { get; set; }
-    
+    public bool HasMoved { get; set; }
     public IField EnemyField { get; set; }
 
 
@@ -15,7 +17,7 @@ public class Player:IPlayer
     }
     public void CreateEnemyField(IPlayer player)
     {
-        this.EnemyField = new Field();
+        this.EnemyField =  player.Field;
     }
     public bool Attack(Point point)
     {
@@ -33,7 +35,7 @@ public class Player:IPlayer
             else
             {
                 point.Status = EPositionStatus.Miss;
-                //TODO: Change Player function to change turn
+                Game_Machine.ChangeTurns();
             }
         }
 

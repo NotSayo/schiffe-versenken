@@ -9,7 +9,7 @@ public interface IBattleships
     
     public void CreateGame();
     public bool GameOver(); 
-    public void SetShips(IPlayer player, List<IShip> ships);
+    public bool SetShip(IPlayer player, List<IShip> ships);
     public void ChangeTurns();
     
     public bool StartGame();

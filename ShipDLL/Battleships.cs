@@ -4,7 +4,7 @@ public class Battleships :IBattleships
 {
     public int Round { get; }
     public List<IPlayer> Players { get; }
-    public IPlayer ActivePlayer { get; }
+    public IPlayer ActivePlayer { get; private set; }
     public EPhase GamePhase { get; }
 
     public void CreateGame()
@@ -23,25 +23,53 @@ public class Battleships :IBattleships
     {
         if(Players[0].Field.LeftHP == 0 || Players[1].Field.LeftHP == 0)
             return true;
-
         return false;
     }
     
     
     
 
-    public void SetShips(IPlayer player, List<IShip> ships)
+    public bool SetShip(IPlayer player, List<IShip> ships, Point startPoint ,Point endPoint)
     {
+        if (ships.Count > 4)
+            throw new TooManyShipsExeption();
+        
+        
         throw new NotImplementedException(); //TODO throw an Exception if there are too many ships or the ships are invalid. Either self made or ArgumentError
     }
 
     public void ChangeTurns()
     {
-        throw new NotImplementedException(); //TODO Check if changeTurn is valid
+        if(ActivePlayer.HasMoved) ChangeActivePlayer();
+    }
+
+    private void ChangeActivePlayer()
+    {
+        foreach (var player in Players)
+        {
+            if (player != ActivePlayer)
+            {
+                ActivePlayer = player;
+                return;
+            }
+        }
     }
 
     public bool StartGame()
     {
+        Players[0].Field.Ships.Add(new Ship(EShip.Destroyer));
+        Players[0].Field.Ships.Add(new Ship(EShip.Battleship));
+        Players[0].Field.Ships.Add(new Ship(EShip.CruiseShip));
+        Players[0].Field.Ships.Add(new Ship(EShip.Submarine));
+        
+        Players[1].Field.Ships.Add(new Ship(EShip.Destroyer));
+        Players[1].Field.Ships.Add(new Ship(EShip.Battleship));
+        Players[1].Field.Ships.Add(new Ship(EShip.CruiseShip));
+        Players[1].Field.Ships.Add(new Ship(EShip.Submarine));
+        
+        
+        
+        SetShips(Players[0], Players[0].Field.Ships);
         throw new NotImplementedException(); //TODO after ships are placed start the game, change phase to playing, and return if the game has started or not (bool)
     }
 

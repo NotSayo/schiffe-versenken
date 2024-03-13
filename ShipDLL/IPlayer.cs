@@ -9,6 +9,7 @@ public interface IPlayer
     public IField Field { get; set; }
     public IField EnemyField { get; set; }
     public void CreateField();
+    public bool HasMoved { get; set; }
     public void CreateEnemyField(IPlayer player);
     public bool Attack(Point point);
 }

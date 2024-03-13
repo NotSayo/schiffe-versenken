@@ -32,11 +32,31 @@ public class Battleships :IBattleships
 
     public void SetShips(IPlayer player, List<IShip> ships)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException(); //TODO throw an Exception if there are too many ships or the ships are invalid. Either self made or ArgumentError
     }
 
     public void ChangeTurns()
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException(); //TODO Check if changeTurn is valid
+    }
+
+    public bool StartGame()
+    {
+        throw new NotImplementedException(); //TODO after ships are placed start the game, change phase to playing, and return if the game has started or not (bool)
+    }
+
+    public void EndGame()
+    {
+        throw new NotImplementedException(); //TODO switch phase from gameOver to NotStarted
+    }
+
+    public void Surrender()
+    {
+        throw new NotImplementedException(); //TODO endgame 
+    }
+
+    public void Draw()
+    {
+        throw new NotImplementedException(); //TODO draw the game
     }
 }

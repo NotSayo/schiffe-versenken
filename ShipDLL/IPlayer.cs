@@ -10,5 +10,5 @@ public interface IPlayer
     public IField EnemyField { get; set; }
     public void CreateField();
     public void CreateEnemyField(IPlayer player);
-    public void Attack(Point point);
+    public bool Attack(Point point);
 }

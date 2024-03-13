@@ -17,7 +17,7 @@ public class Player:IPlayer
     {
         this.EnemyField = new Field();
     }
-    public void Attack(Point point)
+    public bool Attack(Point point)
     {
         foreach (var ship in EnemyField.Ships)
         {
@@ -36,5 +36,7 @@ public class Player:IPlayer
                 //TODO: Change Player function to change turn
             }
         }
+
+        return false; // TODO fix this
     }
 }

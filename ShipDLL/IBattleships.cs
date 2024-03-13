@@ -7,10 +7,16 @@ public interface IBattleships
     public IPlayer ActivePlayer { get; }
     public EPhase GamePhase { get; }
     
-    
-    
     public void CreateGame();
     public bool GameOver(); 
     public void SetShips(IPlayer player, List<IShip> ships);
     public void ChangeTurns();
+    
+    public bool StartGame();
+
+    public void EndGame();
+
+    public void Surrender();
+
+    public void Draw();
 }

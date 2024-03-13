@@ -7,9 +7,32 @@
 
 <div class="container-fluid" id="main_Window">
     <h1>Battle Ships</h1>
-    <div id="Player1Stats">
+    <div id="Player1Stats" class="Player_stats">   <!-- TODO Active class for active player -->
         <h2>Player 1</h2>
-        
+        <div class="Stats_Entry">
+            <div class="Stats_Text">Left HP:</div>
+            <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+        </div>
+        <div class="Stats_Entry">
+            <div class="Stats_Text">Left Ships:</div> <!-- TODO Backend -->
+            <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+        </div>
+        <div class="Stats_Entry">
+            <div class="Stats_Text">Attacks:</div> <!-- TODO Backend -->
+            <div class="Stats_Stat">xx </div> <!-- TODO Backend -->
+        </div>
+        <div class="Stats_Entry">
+            <div class="Stats_Text">Misses:</div> <!-- TODO Backend -->
+            <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+        </div>
+        <div class="Stats_Entry">
+            <div class="Stats_Text">Hits:</div> <!-- TODO Backend -->
+            <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+        </div>
+        <div class="Stats_Buttons">
+            <button class="Stats_draw">Request a Draw</button>
+            <button class="Stats_surrender">Surrender</button>
+        </div>
     </div>
     
     <div id="Player2Stats">

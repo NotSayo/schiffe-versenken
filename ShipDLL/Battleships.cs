@@ -25,9 +25,12 @@ public class Battleships :IBattleships
             return true;
         return false;
     }
-    
-    
-    
+
+    public bool SetShip(IPlayer player, List<IShip> ships)
+    {
+        throw new NotImplementedException();
+    }
+
 
     public bool SetShip(IPlayer player, List<IShip> ships, Point startPoint ,Point endPoint)
     {
@@ -69,7 +72,7 @@ public class Battleships :IBattleships
         
         
         
-        SetShips(Players[0], Players[0].Field.Ships);
+        SetShip(Players[0], Players[0].Field.Ships);
         throw new NotImplementedException(); //TODO after ships are placed start the game, change phase to playing, and return if the game has started or not (bool)
     }
 

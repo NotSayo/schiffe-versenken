@@ -19,8 +19,27 @@ public class Point
         X = x;
         Y = y;
     }
+    
+    public double CalculateDistance(Point point)
+    {
+        
+        return Math.Sqrt(Math.Pow(X+ - (point.X +1), 2) + Math.Pow(Y - point.Y, 2));
+    } 
+        
     public Tuple<int, int> GetPoint()
     {
         return new Tuple<int, int>(X, Y);
     }
+
+    public override string ToString()
+    {
+        return $"({Y}, {X})";
+    }
+
+    public override bool Equals(object? obj)
+    {
+        var p = obj as Point;
+        return X == p.X && Y == p.Y;
+    }
+    
 }

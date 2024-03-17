@@ -13,10 +13,10 @@
     <h1>Battle Ships</h1>
     <div id="Player1Stats" class="Player_stats">   <!-- TODO Active class for active player -->
         <h2>Player 1</h2>
-        @if(Phase == EPhase.PlacingShips && ActivePlayer == Players[0])
+        @if(game.GamePhase == EPhase.PlacingShips && game.ActivePlayer == game.Players[0])
         {
             <div class="ShipsLayout">
-                @foreach (var ship in Ships)
+                @foreach (var ship in game.Players[0].UnplacedShips)
                 {
                     <div class="Placing_Ship">
                         <img @onclick="() => PlaceShip(ship.Type)" class="@(ship == ActiveShip ? "activeShip":"")" src="./Img/@(ship.Type).png"/>
@@ -92,11 +92,11 @@
                      var tempint2 = i;
                      <a><div class="FieldPoint" @onclick="() => FieldClicked(tempint2)">
                          
-                         @if (ShipFields[tempint2] != null) //TODO returns 0, for some reason
-                         {
-                             var j = i;
-                             <img class="PlacedShip Placed @((ShipFields[j].Type)) @GetIndexFromSequence(ShipFields[j].Type, j)" src="Img/@(ShipFields[tempint2].Type).png"/>
-                         }
+                         @* @if (ShipFields[tempint2] != null) //TODO returns 0, for some reason *@
+                         @* { *@
+                         @*     var j = i; *@
+                         @*     <img class="PlacedShip Placed @((ShipFields[j].Type)) @GetIndexFromSequence(ShipFields[j].Type, j)" src="Img/@(ShipFields[tempint2].Type).png"/> *@
+                         @* } *@
                      </div></a>
                  }
              }
@@ -111,7 +111,7 @@
 
 
 @code {
-    private Battleships game;
+    private Battleships game { get; set; } = new Battleships();
     
     public EPhase Phase { get; set; }
     public IPlayer ActivePlayer { get; set; }
@@ -125,6 +125,10 @@
     protected override void OnInitialized()
     {
         game = new Battleships();
+        game.CreateGame();
+
+
+        return;
         Phase = EPhase.NotStarted;
         Players = new List<IPlayer>() { new Player(), new Player() };
         ActivePlayer = Players[0];
@@ -138,13 +142,7 @@
     
     public void StartGame() // TODO connect to Backend
     {
-        //game.StartGame();
-        Phase = EPhase.PlacingShips;
-    }
-
-    public void StartPlacingShips()
-    {
-        
+        game.StartPlacingShips();
     }
 
     public void PlaceShip(EShip shipType)
@@ -184,9 +182,10 @@
         Phase = EPhase.Playing;
     }
 
-    public void FieldClicked(int field)
+    public void FieldClicked(int field) //TODO this is how far I got with debugging
     {
         var result = EnterPoint(field);
+        Console.WriteLine("here");
         if (result == -1 || result == 0)
             return;
         bool placingResult = TryPlacingShip();
@@ -198,27 +197,33 @@
     {
         SelectedPoints = SelectedPoints.OrderBy(s => s.X).ToList();
 
-        double distance = Math.Abs(SelectedPoints[0].CalculateDistance(SelectedPoints[1]));
-        Console.WriteLine(distance);
-
-        if (distance == (double) ActiveShip.HP)
-        {
-            Console.WriteLine("Ship can be placed");
-            Ships.Remove(ActiveShip);
-            int Field = SelectedPoints[0].Y * 10 + SelectedPoints[0].X;
-            int Field2 = SelectedPoints[1].Y * 10 + SelectedPoints[1].X;
-            List<Point> betweenPoints = CalculateBetweenPoints(SelectedPoints[0], SelectedPoints[1]);
-            foreach (var point in betweenPoints)
-            {
-                ShipFields[point.Y * 10 + point.X] = ActiveShip;
-            }
-            ActiveShip = null;
-            CheckPlacingSwitch();
-            
-            return true;
-        }
+        game.SetShip(ActiveShip, SelectedPoints[0], SelectedPoints[1]);
+        
         
         return false;
+        
+        
+        // double distance = Math.Abs(SelectedPoints[0].CalculateDistance(SelectedPoints[1]));
+        // Console.WriteLine(distance);
+        //
+        // if (distance == (double) ActiveShip.HP)
+        // {
+        //     Console.WriteLine("Ship can be placed");
+        //     Ships.Remove(ActiveShip);
+        //     int Field = SelectedPoints[0].Y * 10 + SelectedPoints[0].X;
+        //     int Field2 = SelectedPoints[1].Y * 10 + SelectedPoints[1].X;
+        //     List<Point> betweenPoints = CalculateBetweenPoints(SelectedPoints[0], SelectedPoints[1]);
+        //     foreach (var point in betweenPoints)
+        //     {
+        //         ShipFields[point.Y * 10 + point.X] = ActiveShip;
+        //     }
+        //     ActiveShip = null;
+        //     CheckPlacingSwitch();
+        //     
+        //     return true;
+        // }
+        //
+        // return false;
     }
 
     private int EnterPoint(int field)
@@ -258,26 +263,7 @@
     {
         return new Point(field % 10, (int)Math.Floor((double)field / 10));
     }
-
-    public List<Point> CalculateBetweenPoints(Point p1, Point p2)
-    {
-        List<Point> points = new List<Point>();
-        if (p1.X != p2.X)
-        {
-            for (int i = p1.X; i <= p2.X; i++)
-            {
-                points.Add(new Point(i, p1.Y));
-            }
-        }
-        if (p1.Y != p2.Y)
-        {
-            for (int i = p1.Y; i <= p2.Y; i++)
-            {
-                points.Add(new Point(p1.X, i));
-            }
-        }
-        return points;
-    }
+    
 
     public int GetIndexFromSequence(EShip type, int field)
     {

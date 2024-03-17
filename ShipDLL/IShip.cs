@@ -6,4 +6,5 @@ public interface IShip
     public EShip Type { get; set; }
     public bool IsAlive { get; set; }
     public Point[] Positions { get; set; }
+    public int NumberInSequence { get; set; }
 }

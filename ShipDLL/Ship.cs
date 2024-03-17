@@ -8,6 +8,7 @@ public class Ship : IShip
     public int PosX { get; set; }
     public int PosY { get; set; }
     public Point[] Positions { get; set; }
+    public int NumberInSequence { get; set; }
 
     public Ship(EShip type)
     {

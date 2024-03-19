@@ -12,7 +12,7 @@ public interface IBattleships
     public bool SetShip(IShip ship, Point startPoint ,Point endPoint);
     public void ChangeTurns();
     
-    public bool StartGame();
+    public void StartGame();
 
     public void EndGame();
 

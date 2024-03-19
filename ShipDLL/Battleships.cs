@@ -6,6 +6,7 @@ public class Battleships :IBattleships
     public List<IPlayer> Players { get; set; }
     public IPlayer ActivePlayer { get; private set; }
     public EPhase GamePhase { get; set; }
+    public EResult Result { get; set; }
 
     public Battleships()
     {
@@ -13,6 +14,7 @@ public class Battleships :IBattleships
         Players.Add(new Player() {ID = 1});
         Players.Add(new Player() {ID = 2});
         GamePhase = EPhase.NotStarted;
+        Result = EResult.Draw;
         
         ActivePlayer = Players[0];
     }
@@ -36,19 +38,35 @@ public class Battleships :IBattleships
 
     public bool GameOver()
     {
-        if(Players[0].Field.LeftHP == 0 || Players[1].Field.LeftHP == 0)
+        if (Players[0].Field.LeftHP == 0 || Players[1].Field.LeftHP == 0)
+        {
+            GamePhase = EPhase.GameOver;
+            GetWonPlayer();
             return true;
+        }
+           
         return false;
+    }
+    private void GetWonPlayer()
+    {
+        if (Players[0].Field.LeftHP == 0)
+        {
+            Players[1].HasWon = true;
+            Result = EResult.Player2Win;
+            return;
+        }
+        if (Players[1].Field.LeftHP == 0)
+        {
+            Players[0].HasWon = true;
+            Result = EResult.Player1Win;
+            return;
+        }
     }
 
     public bool SetShip(IShip ship, Point startPoint ,Point endPoint)
     {
-        bool result = ActivePlayer.SetShip(ship, startPoint.CalculateBetweenPoints(endPoint));
-        
-        return result;
-        
-        
-        throw new NotImplementedException(); //TODO throw an Exception if there are too many ships or the ships are invalid. Either self made or ArgumentError
+        return ActivePlayer.SetShip(ship, startPoint.CalculateBetweenPoints(endPoint));
+        throw new TooManyShipsExeption();
     }
 
     public void ChangeTurns()
@@ -68,34 +86,43 @@ public class Battleships :IBattleships
         }
     }
 
-    public bool StartGame()
+    public void StartGame()
     {
-        Players[0].Field.Ships.Add(new Ship(EShip.Destroyer));
-        Players[0].Field.Ships.Add(new Ship(EShip.Battleship));
-        Players[0].Field.Ships.Add(new Ship(EShip.CruiseShip));
-        Players[0].Field.Ships.Add(new Ship(EShip.Submarine));
+        if(this.GamePhase == EPhase.PlacingShips && Players[0].Field.Ships.Count == 4 && Players[1].Field.Ships.Count == 4 && Players[0].UnplacedShips.Count == 0 && Players[1].UnplacedShips.Count == 0)
+            this.GamePhase = EPhase.Playing;
         
-        Players[1].Field.Ships.Add(new Ship(EShip.Destroyer));
-        Players[1].Field.Ships.Add(new Ship(EShip.Battleship));
-        Players[1].Field.Ships.Add(new Ship(EShip.CruiseShip));
-        Players[1].Field.Ships.Add(new Ship(EShip.Submarine));
-
-        return false;
-        throw new NotImplementedException(); //TODO after ships are placed start the game, change phase to playing, and return if the game has started or not (bool)
     }
 
     public void EndGame()
     {
-        throw new NotImplementedException(); //TODO switch phase from gameOver to NotStarted
+        if (this.GamePhase == EPhase.GameOver) 
+            this.GamePhase = EPhase.NotStarted;
+        
     }
 
     public void Surrender()
     {
-        throw new NotImplementedException(); //TODO endgame 
+        var SurrenderedPlayer = Players.Where(p => p != ActivePlayer).First();
+        if (SurrenderedPlayer == Players[0])
+        {
+            Result = EResult.Player1Win;
+            
+        }
+        else
+        {
+            Result = EResult.Player2Win;
+        }
+        SurrenderedPlayer.HasWon = false;
+        GamePhase = EPhase.GameOver;
+            
     }
 
     public void Draw()
     {
-        throw new NotImplementedException(); //TODO draw the game
+        if(this.GamePhase == EPhase.GameOver)
+        {  
+            this.Result = EResult.Draw;
+            this.GamePhase = EPhase.NotStarted;
+        }
     }
 }

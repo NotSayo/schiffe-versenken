@@ -8,6 +8,7 @@ public class Player:IPlayer
     public IField Field { get; set; }
     public bool HasMoved { get; set; }
     public IField EnemyField { get; set; }
+    public bool HasWon { get; set; }
 
     public Player()
     {
@@ -15,6 +16,7 @@ public class Player:IPlayer
         {
             new Ship(EShip.Battleship), new Ship(EShip.Destroyer), new Ship(EShip.Submarine), new Ship(EShip.CruiseShip)
         };
+        HasWon = false; 
     }
 
     public void CreateField()

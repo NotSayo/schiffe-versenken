@@ -2,7 +2,7 @@
 
 public class Field :IField
 {
-    public IShip[] FieldArr { get; set; }
+    public ShipPart[] FieldArr { get; set; }
     public List<IShip> Ships { get; set; }
 
     public int LeftHP
@@ -23,7 +23,7 @@ public class Field :IField
 
     public Field()
     {
-        FieldArr = new Ship[100];
+        FieldArr = new ShipPart[100];
 
         Ships = new List<IShip>();
     }

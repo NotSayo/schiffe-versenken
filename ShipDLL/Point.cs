@@ -22,7 +22,6 @@ public class Point
     
     public double CalculateDistance(Point point)
     {
-        
         return Math.Sqrt(Math.Pow(X+ - (point.X +1), 2) + Math.Pow(Y - point.Y, 2));
     } 
     

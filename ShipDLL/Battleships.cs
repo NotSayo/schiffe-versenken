@@ -66,8 +66,10 @@ public class Battleships :IBattleships
     public bool SetShip(IShip ship, Point startPoint ,Point endPoint)
     {
        bool result = ActivePlayer.SetShip(ship, startPoint.CalculateBetweenPoints(endPoint));
-        if (ActivePlayer.UnplacedShips.Count() == 0) 
-            ChangeActivePlayer();
+       if (ActivePlayer.UnplacedShips.Count() == 0) 
+           ChangeActivePlayer();
+       StartGame();
+        
         return result;
     }
 
@@ -114,22 +116,22 @@ public class Battleships :IBattleships
     }
     public bool Attack(Point point)
     {
-        foreach (var ship in .Ships)
-        {
-            if (ship.Positions.Contains(point))
-            {
-                ship.HP--;
-                point.Status = EPositionStatus.Hit;
-                if (ship.HP == 0)
-                {
-                    ship.IsAlive = false;
-                }
-            }
-            else
-            {
-                point.Status = EPositionStatus.Miss;
-            }
-        }
+        // foreach (var ship in Ships)
+        // {
+        //     if (ship.Positions.Contains(point))
+        //     {
+        //         ship.HP--;
+        //         point.Status = EPositionStatus.Hit;
+        //         if (ship.HP == 0)
+        //         {
+        //             ship.IsAlive = false;
+        //         }
+        //     }
+        //     else
+        //     {
+        //         point.Status = EPositionStatus.Miss;
+        //     }
+        // }
 
         return false; // TODO fix this
     }

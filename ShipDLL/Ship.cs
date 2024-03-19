@@ -1,4 +1,6 @@
-﻿namespace ShipDLL;
+﻿using System.Net;
+
+namespace ShipDLL;
 
 public class Ship : IShip
 {
@@ -6,7 +8,8 @@ public class Ship : IShip
     public EShip Type { get; set; }
     public bool IsAlive { get; set; }
     public Point[] Positions { get; set; }
-    public int NumberInSequence { get; set; }
+    
+    public List<ShipPart> ShipParts { get; set; }
 
     public Ship(EShip type)
     {
@@ -14,7 +17,8 @@ public class Ship : IShip
         IsAlive = true;
 
         HP = (int) type;
-        
+        ShipParts = new List<ShipPart>();
+
         // switch (type)
         // {
         //     case EShip.Destroyer:
@@ -31,7 +35,7 @@ public class Ship : IShip
         //         break;
         //         
         // }
-        
+
     }
     
 }

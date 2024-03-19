@@ -10,4 +10,8 @@
       <ProjectReference Include="..\ShipDLL\ShipDLL.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\Img\" />
+    </ItemGroup>
+
 </Project>

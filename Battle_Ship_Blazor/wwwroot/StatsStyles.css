@@ -65,3 +65,36 @@
 .Stats_surrender {
     justify-self: right;
 }
+
+.ShipsLayout {
+    grid-row: 2 / span all;
+    grid-column: 1 / span all;
+    /*background-color: green;*/
+    
+}
+
+.ShipsLayout {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr ;
+}
+
+.Placing_Ship {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    justify-items: center;
+    justify-self: center;
+}
+
+.Placing_Ship > img {
+    width: 75%;
+}
+
+.Placing_Ship > div {
+    font-size: 22px ;
+    font-family: "Lucida Bright";
+    justify-self: center;
+}
+
+.activeShip {
+    border: yellow 2px dotted;
+}

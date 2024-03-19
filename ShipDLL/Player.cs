@@ -2,19 +2,44 @@
 
 public class Player:IPlayer
 {
-    private Battleships Game_Machine = new Battleships();
     
     public int ID { get; set; }
+    public List<IShip> UnplacedShips { get; set; }
     public IField Field { get; set; }
     public bool HasMoved { get; set; }
     public IField EnemyField { get; set; }
 
+    public Player()
+    {
+        UnplacedShips = new List<IShip>()
+        {
+            new Ship(EShip.Battleship), new Ship(EShip.Destroyer), new Ship(EShip.Submarine), new Ship(EShip.CruiseShip)
+        };
+    }
 
     public void CreateField()
     {
         this.Field = new Field();
-        
     }
+
+    public bool SetShip(IShip ship, List<Point> Points)
+    {
+        if (UnplacedShips.Where(s => s.Type == ship.Type).Count() == 0)
+            return false;
+        if (Points.Count() != ship.HP)
+            return false;
+        int i = 1;
+        Field.Ships.Add(ship);
+        UnplacedShips.Remove(ship);
+        foreach (var point in Points)
+        {
+            ship.NumberInSequence = i;
+            Field.FieldArr[point.GetIndex()] = ship;
+        }
+        
+        return true;
+    }
+    
     public void CreateEnemyField(IPlayer player)
     {
         this.EnemyField =  player.Field;
@@ -35,7 +60,6 @@ public class Player:IPlayer
             else
             {
                 point.Status = EPositionStatus.Miss;
-                Game_Machine.ChangeTurns();
             }
         }
 

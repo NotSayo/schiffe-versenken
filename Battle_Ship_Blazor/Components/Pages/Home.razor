@@ -1,5 +1,9 @@
 ﻿@page "/"
 @using ShipDLL
+@using System.ComponentModel.Design
+@using System.Net.Sockets
+@using System.Runtime.CompilerServices
+@using Microsoft.AspNetCore.Mvc.ModelBinding.Binders
 @rendermode RenderMode.InteractiveServer
 @attribute [StreamRendering]
 
@@ -9,33 +13,53 @@
     <h1>Battle Ships</h1>
     <div id="Player1Stats" class="Player_stats">   <!-- TODO Active class for active player -->
         <h2>Player 1</h2>
-        <div class="Stats_Entry">
-            <div class="Stats_Text">Left HP:</div>
-            <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
-        </div>
-        <div class="Stats_Entry">
-            <div class="Stats_Text">Left Ships:</div> <!-- TODO Backend -->
-            <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
-        </div>
-        <div class="Stats_Entry">
-            <div class="Stats_Text">Attacks:</div> <!-- TODO Backend -->
-            <div class="Stats_Stat">xx </div> <!-- TODO Backend -->
-        </div>
-        <div class="Stats_Entry">
-            <div class="Stats_Text">Misses:</div> <!-- TODO Backend -->
-            <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
-        </div>
-        <div class="Stats_Entry">
-            <div class="Stats_Text">Hits:</div> <!-- TODO Backend -->
-            <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
-        </div>
-        <div class="Stats_Buttons">
-            <button class="Stats_draw">Request a Draw</button>
-            <button class="Stats_surrender">Surrender</button>
-        </div>
+        @if(game.GamePhase == EPhase.PlacingShips && game.ActivePlayer == game.Players[0])
+        {
+            <div class="ShipsLayout">
+                @foreach (var ship in game.Players[0].UnplacedShips)
+                {
+                    <div class="Placing_Ship">
+                        <img @onclick="() => PlaceShip(ship.Type)" class="@(ship == ActiveShip ? "activeShip":"")" src="./Img/@(ship.Type).png"/>
+                        <div>@ship.Type , @((int)@ship.Type)</div>
+                    </div>
+                }
+                <!-- TEMPLATE -->
+                @* <div class="Placing_Ship"> *@
+                @*     <img src="./Img/5_HP.png"/> *@
+                @*     <div>Name</div> *@
+                @* </div> *@
+            </div>
+        }
+        else
+        {
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Left HP:</div>
+                <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Left Ships:</div> <!-- TODO Backend -->
+                <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Attacks:</div> <!-- TODO Backend -->
+                <div class="Stats_Stat">xx </div> <!-- TODO Backend -->
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Misses:</div> <!-- TODO Backend -->
+                <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Hits:</div> <!-- TODO Backend -->
+                <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+            </div>
+            <div class="Stats_Buttons">
+                 <button class="Stats_draw" @onclick="StartGame">Start Placing</button> @* TODO change that back to draw *@
+                <button class="Stats_surrender">Surrender</button>
+            </div>
+        }
     </div>
     
-    <div id="Player2Stats">
+    <div id="Player2Stats" class="Player_stats">
         <!-- TODO STATS -->
     </div>
     
@@ -49,6 +73,7 @@
             {
                 @for (int i = 0; i < 100; i++)
                 {
+                    var tempint1 = i;
                     <a><div class="FieldPoint"></div></a>
                 }
                 
@@ -64,7 +89,15 @@
              {
                  @for (int i = 0; i < 100; i++)
                  {
-                     <a><div class="FieldPoint"></div></a>
+                     var tempint2 = i;
+                     <a><div class="FieldPoint" @onclick="() => FieldClicked(tempint2)">
+                         
+                         @* @if (game.Players[0].Field.FieldArr[tempint2] != null) //TODO returns 0, for some reason *@
+                         @* { *@
+                         @*     var j = i; *@
+                         @*     <img class="PlacedShip Placed @((game.Players[0].Field.FieldArr[tempint2].Type)) @GetIndexFromSequence(ShipFields[j].Type, j)" src="Img/@(ShipFields[tempint2].Type).png"/> *@
+                         @* } *@
+                     </div></a>
                  }
              }
         </div>
@@ -78,12 +111,175 @@
 
 
 @code {
-    private Battleships game;
-
+    private Battleships game { get; set; } = new Battleships();
+    
+    public EPhase Phase { get; set; }
+    public IPlayer ActivePlayer { get; set; }
+    public List<IPlayer> Players { get; set; }
+    public List<IShip> Ships { get; set; }
+    public IShip[] ShipFields { get; set; }
+    public List<Point> SelectedPoints { get; set; }
+    
+    public IShip ActiveShip { get; set; }
+    
     protected override void OnInitialized()
     {
         game = new Battleships();
+        game.CreateGame();
+
+
+        return;
+        Phase = EPhase.NotStarted;
+        Players = new List<IPlayer>() { new Player(), new Player() };
+        ActivePlayer = Players[0];
+
+        Ships = new List<IShip>() {new Ship(EShip.Battleship), new Ship(EShip.Destroyer), new Ship(EShip.Submarine), new Ship(EShip.CruiseShip) };
+        Ships = Ships.OrderByDescending(Type => Type.Type).ToList();
+        
+        ShipFields = new IShip[100];
+        SelectedPoints = new List<Point>();
+    }
+    
+    public void StartGame() // TODO connect to Backend
+    {
+        game.StartPlacingShips();
     }
 
+    public void PlaceShip(EShip shipType)
+    {
+        if (game.GamePhase != EPhase.PlacingShips)
+            return;
+        if (ActiveShip == null)
+        {
+            ActiveShip = game.ActivePlayer.UnplacedShips.Where(s => s.Type == shipType).FirstOrDefault();
+            return;
+        }
 
+        if (ActiveShip.Type != shipType)
+        {
+            ActiveShip = game.ActivePlayer.UnplacedShips.Where(s => s.Type == shipType).FirstOrDefault();
+            return;
+        }
+        ActiveShip = null;
+
+        // IShip ship = Ships.Where(s => s.Type == shipType).FirstOrDefault();
+        // if (ship != null)
+        // {
+        //     //game.PlaceShip(ship, ActivePlayer);
+        //     Ships.Remove(ship);
+        //     CheckPlacingEnd();
+    }
+
+    public void CheckPlacingEnd()
+    {
+        if (Ships.Count != 0)
+            return;
+        if (ActivePlayer != Players[1])
+        {
+            ActivePlayer = Players[1];
+            return;
+        }
+        Phase = EPhase.Playing;
+    }
+
+    public void FieldClicked(int field) //TODO this is how far I got with debugging
+    {
+        var result = EnterPoint(field);
+        Console.WriteLine("here");
+        if (result == -1 || result == 0)
+            return;
+        bool placingResult = game.SetShip(ActiveShip, SelectedPoints[0], SelectedPoints[1]);
+        Console.WriteLine(placingResult);
+        
+    }
+    
+    private bool TryPlacingShip() //TODO Split?
+    {
+        SelectedPoints = SelectedPoints.OrderBy(s => s.X).ToList();
+
+        game.SetShip(ActiveShip, SelectedPoints[0], SelectedPoints[1]);
+        
+        
+        return false;
+        
+        
+        // double distance = Math.Abs(SelectedPoints[0].CalculateDistance(SelectedPoints[1]));
+        // Console.WriteLine(distance);
+        //
+        // if (distance == (double) ActiveShip.HP)
+        // {
+        //     Console.WriteLine("Ship can be placed");
+        //     Ships.Remove(ActiveShip);
+        //     int Field = SelectedPoints[0].Y * 10 + SelectedPoints[0].X;
+        //     int Field2 = SelectedPoints[1].Y * 10 + SelectedPoints[1].X;
+        //     List<Point> betweenPoints = CalculateBetweenPoints(SelectedPoints[0], SelectedPoints[1]);
+        //     foreach (var point in betweenPoints)
+        //     {
+        //         ShipFields[point.Y * 10 + point.X] = ActiveShip;
+        //     }
+        //     ActiveShip = null;
+        //     CheckPlacingSwitch();
+        //     
+        //     return true;
+        // }
+        //
+        // return false;
+    }
+
+    private int EnterPoint(int field)
+    {
+        if (game.GamePhase != EPhase.PlacingShips || ActiveShip == null)
+            return -1;
+        if (SelectedPoints == null)
+            SelectedPoints = new List<Point>();
+        if (SelectedPoints.Count == 2)
+        {
+            Console.WriteLine(SelectedPoints[0] + " " + SelectedPoints[1]);
+            SelectedPoints = new List<Point>();
+        }
+        
+        Point p = new Point(field % 10,(int)Math.Floor((double)field / 10));
+        SelectedPoints.Add(p);
+
+        if (SelectedPoints.Count == 2)
+            return 1;
+        
+        return 0;
+    }
+
+    private void CheckPlacingSwitch()
+    {
+        if(Ships.Count ==  0)
+            SwitchActivePlayer();
+    }
+    
+    private void SwitchActivePlayer()
+    {
+        if (ActivePlayer == Players[0])
+            ActivePlayer = Players[1];
+        else
+            ActivePlayer = Players[0];
+    }
+
+    public Point GetPointFromField(int field)
+    {
+        return new Point(field % 10, (int)Math.Floor((double)field / 10));
+    }
+    
+
+    public int GetIndexFromSequence(EShip type, int field)
+    {
+        int index = 0;
+        for (; field > 0; field--)
+        {
+            if (ShipFields[field] == null)
+                return index;
+            if (ShipFields[field].Type == type)
+                index++;
+            else
+                return index;
+        }
+
+        return default;
+    }
 }

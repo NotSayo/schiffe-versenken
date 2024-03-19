@@ -3,21 +3,36 @@
 public class Battleships :IBattleships
 {
     public int Round { get; }
-    public List<IPlayer> Players { get; }
+    public List<IPlayer> Players { get; set; }
     public IPlayer ActivePlayer { get; private set; }
-    public EPhase GamePhase { get; }
+    public EPhase GamePhase { get; set; }
+
+    public Battleships()
+    {
+        Players = new List<IPlayer>();
+        Players.Add(new Player() {ID = 1});
+        Players.Add(new Player() {ID = 2});
+        GamePhase = EPhase.NotStarted;
+        
+        ActivePlayer = Players[0];
+    }
+
+    public bool StartPlacingShips()
+    {
+        if(GamePhase != EPhase.NotStarted) return false;
+        GamePhase = EPhase.PlacingShips;
+        return true;
+    }
 
     public void CreateGame()
     {
         Players[0].CreateField();
-        
         Players[1].CreateField();
-        
+
         Players[0].CreateEnemyField(Players[1]);
-        
         Players[1].CreateEnemyField(Players[0]);
-        
     }
+    
 
     public bool GameOver()
     {
@@ -25,14 +40,12 @@ public class Battleships :IBattleships
             return true;
         return false;
     }
-    
-    
-    
 
-    public bool SetShip(IPlayer player, List<IShip> ships, Point startPoint ,Point endPoint)
+    public bool SetShip(IShip ship, Point startPoint ,Point endPoint)
     {
-        if (ships.Count > 4)
-            throw new TooManyShipsExeption();
+        bool result = ActivePlayer.SetShip(ship, startPoint.CalculateBetweenPoints(endPoint));
+        
+        return result;
         
         
         throw new NotImplementedException(); //TODO throw an Exception if there are too many ships or the ships are invalid. Either self made or ArgumentError
@@ -66,10 +79,8 @@ public class Battleships :IBattleships
         Players[1].Field.Ships.Add(new Ship(EShip.Battleship));
         Players[1].Field.Ships.Add(new Ship(EShip.CruiseShip));
         Players[1].Field.Ships.Add(new Ship(EShip.Submarine));
-        
-        
-        
-        SetShips(Players[0], Players[0].Field.Ships);
+
+        return false;
         throw new NotImplementedException(); //TODO after ships are placed start the game, change phase to playing, and return if the game has started or not (bool)
     }
 

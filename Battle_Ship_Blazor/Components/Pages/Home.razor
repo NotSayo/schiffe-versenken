@@ -60,25 +60,69 @@
     </div>
     
     <div id="Player2Stats" class="Player_stats">
-        <!-- TODO STATS -->
+    <h2>Player 2</h2>
+        @if(game.GamePhase == EPhase.PlacingShips && game.ActivePlayer == game.Players[1])
+        {
+            <div class="ShipsLayout">
+                @foreach (var ship in game.Players[1].UnplacedShips)
+                {
+                    <div class="Placing_Ship">
+                        <img @onclick="() => PlaceShip(ship.Type)" class="@(ship == ActiveShip ? "activeShip":"")" src="./Img/@(ship.Type).png"/>
+                        <div>@ship.Type , @((int)@ship.Type)</div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Left HP:</div>
+                <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Left Ships:</div> <!-- TODO Backend -->
+                <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Attacks:</div> <!-- TODO Backend -->
+                <div class="Stats_Stat">xx </div> <!-- TODO Backend -->
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Misses:</div> <!-- TODO Backend -->
+                <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Hits:</div> <!-- TODO Backend -->
+                <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+            </div>
+            <div class="Stats_Buttons">
+                 <button class="Stats_draw" @onclick="StartGame">Start Placing</button> @* TODO change that back to draw *@
+                <button class="Stats_surrender">Surrender</button>
+            </div>
+        }
     </div>
     
     <div id="MainBoard">
         <div class="FieldEntry">
             @if (game == null)
-            {
-                <div>Loading</div>
-            }
-            else
-            {
-                @for (int i = 0; i < 100; i++)
-                {
-                    var tempint1 = i;
-                    <a><div class="FieldPoint"></div></a>
-                }
-                
-                
-            }
+             { 
+                 <div>Loading</div>
+             }
+             else
+             {
+                 @for (int i = 0; i < 100; i++)
+                 {
+                     var tempint2 = i;
+                     <a><div class="FieldPoint" @onclick="() => FieldClicked(tempint2, 2)">
+                         
+                         @if (game.Players[1].Field.FieldArr[tempint2] != null) //TODO returns 0, for some reason
+                         {
+                             var j = game.Players[1].Field.FieldArr[tempint2].NumberInSequence;
+                             <img class="PlacedShip Placed @((game.Players[1].Field.FieldArr[tempint2].Parent.Type) + "" + j)" src="Img/@(game.Players[1].Field.FieldArr[tempint2].Parent.Type).png"/>
+                         }
+                     </div></a>
+                 }
+             }
         </div>
          <div class="FieldEntry">
              @if (game == null)
@@ -90,13 +134,13 @@
                  @for (int i = 0; i < 100; i++)
                  {
                      var tempint2 = i;
-                     <a><div class="FieldPoint" @onclick="() => FieldClicked(tempint2)">
+                     <a><div class="FieldPoint" @onclick="() => FieldClicked(tempint2, 1)">
                          
-                         @* @if (game.Players[0].Field.FieldArr[tempint2] != null) //TODO returns 0, for some reason *@
-                         @* { *@
-                         @*     var j = i; *@
-                         @*     <img class="PlacedShip Placed @((game.Players[0].Field.FieldArr[tempint2].Type)) @GetIndexFromSequence(ShipFields[j].Type, j)" src="Img/@(ShipFields[tempint2].Type).png"/> *@
-                         @* } *@
+                         @if (game.Players[0].Field.FieldArr[tempint2] != null) //TODO returns 0, for some reason
+                         {
+                             var j = game.Players[0].Field.FieldArr[tempint2].NumberInSequence;
+                             <img class="PlacedShip Placed @((game.Players[0].Field.FieldArr[tempint2].Parent.Type) + "" + j)" src="Img/@(game.Players[0].Field.FieldArr[tempint2].Parent.Type).png"/>
+                         }
                      </div></a>
                  }
              }
@@ -182,8 +226,10 @@
         Phase = EPhase.Playing;
     }
 
-    public void FieldClicked(int field) //TODO this is how far I got with debugging
+    public void FieldClicked(int field, int PlayerID)
     {
+        if(game.ActivePlayer.ID != PlayerID)
+            return;
         var result = EnterPoint(field);
         Console.WriteLine("here");
         if (result == -1 || result == 0)

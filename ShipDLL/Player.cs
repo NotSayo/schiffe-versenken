@@ -35,8 +35,10 @@ public class Player:IPlayer
         UnplacedShips.Remove(ship);
         foreach (var point in Points)
         {
-            ship.NumberInSequence = i;
-            Field.FieldArr[point.GetIndex()] = ship;
+            ShipPart part = new ShipPart(ship, i);
+            ship.ShipParts.Add(part);
+            Field.FieldArr[point.GetIndex()] = part;
+            i++;
         }
         
         return true;
@@ -48,22 +50,22 @@ public class Player:IPlayer
     }
     public bool Attack(Point point)
     {
-        foreach (var ship in EnemyField.Ships)
-        {
-            if (ship.Positions.Contains(point))
-            {
-                ship.HP--;
-                point.Status = EPositionStatus.Hit;
-                if (ship.HP == 0)
-                {
-                    ship.IsAlive = false;
-                }
-            }
-            else
-            {
-                point.Status = EPositionStatus.Miss;
-            }
-        }
+        // foreach (var ship in EnemyField.Ships)
+        // {
+        //     if (ship.Positions.Contains(point))
+        //     {
+        //         ship.HP--;
+        //         point.Status = EPositionStatus.Hit;
+        //         if (ship.HP == 0)
+        //         {
+        //             ship.IsAlive = false;
+        //         }
+        //     }
+        //     else
+        //     {
+        //         point.Status = EPositionStatus.Miss;
+        //     }
+        // }
 
         return false; // TODO fix this
     }

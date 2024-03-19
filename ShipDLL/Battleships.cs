@@ -65,32 +65,23 @@ public class Battleships :IBattleships
 
     public bool SetShip(IShip ship, Point startPoint ,Point endPoint)
     {
-        
-        
        bool result = ActivePlayer.SetShip(ship, startPoint.CalculateBetweenPoints(endPoint));
-        if (ActivePlayer.UnplacedShips.Where(s => s.Type == ship.Type).Count() == 0)
-        {
-            this.ActivePlayer = Players.Where(p => p != ActivePlayer).First();
-        }
-
+       if (ActivePlayer.UnplacedShips.Count() == 0) 
+           ChangeActivePlayer();
+       StartGame();
+        
         return result;
     }
 
     public void ChangeTurns()
     {
-        if(ActivePlayer.HasMoved) ChangeActivePlayer();
+        if(ActivePlayer.HasMoved) 
+            ChangeActivePlayer();
     }
 
     private void ChangeActivePlayer()
     {
-        foreach (var player in Players)
-        {
-            if (player != ActivePlayer)
-            {
-                ActivePlayer = player;
-                return;
-            }
-        }
+        this.ActivePlayer = Players.Where(p => p != ActivePlayer).First();
     }
 
     public void StartGame()
@@ -122,6 +113,27 @@ public class Battleships :IBattleships
         SurrenderedPlayer.HasWon = false;
         GamePhase = EPhase.GameOver;
             
+    }
+    public bool Attack(Point point)
+    {
+        // foreach (var ship in Ships)
+        // {
+        //     if (ship.Positions.Contains(point))
+        //     {
+        //         ship.HP--;
+        //         point.Status = EPositionStatus.Hit;
+        //         if (ship.HP == 0)
+        //         {
+        //             ship.IsAlive = false;
+        //         }
+        //     }
+        //     else
+        //     {
+        //         point.Status = EPositionStatus.Miss;
+        //     }
+        // }
+
+        return false; // TODO fix this
     }
 
     public void Draw()

@@ -2,6 +2,8 @@
 
 public enum EShip
 {
+    
+    //TODO GORLOCK THE DESTROYER
     Destroyer = 5,
     Battleship = 4,
     CruiseShip = 3,

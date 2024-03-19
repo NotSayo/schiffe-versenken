@@ -9,6 +9,7 @@ public class Player:IPlayer
     public bool HasMoved { get; set; }
     public IField EnemyField { get; set; }
     public bool HasWon { get; set; }
+    public bool AcceptDraw { get; set; }
 
     public Player()
     {
@@ -25,7 +26,7 @@ public class Player:IPlayer
     }
 
     public bool SetShip(IShip ship, List<Point> Points)
-    {
+    { 
         if (UnplacedShips.Where(s => s.Type == ship.Type).Count() == 0)
             return false;
         if (Points.Count() != ship.HP)

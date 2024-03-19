@@ -73,6 +73,11 @@ public class Battleships :IBattleships
         return result;
     }
 
+    private IPlayer GetInactivePlayer()
+    {
+        return this.ActivePlayer = Players.Where(p => p != ActivePlayer).First();
+    }
+
     public void ChangeTurns()
     {
         if(ActivePlayer.HasMoved) 
@@ -81,7 +86,7 @@ public class Battleships :IBattleships
 
     private void ChangeActivePlayer()
     {
-        this.ActivePlayer = Players.Where(p => p != ActivePlayer).First();
+        GetInactivePlayer();
     }
 
     public void StartGame()
@@ -100,7 +105,7 @@ public class Battleships :IBattleships
 
     public void Surrender()
     {
-        var SurrenderedPlayer = Players.Where(p => p != ActivePlayer).First();
+        var SurrenderedPlayer = GetInactivePlayer();
         if (SurrenderedPlayer == Players[0])
         {
             Result = EResult.Player1Win;
@@ -116,29 +121,33 @@ public class Battleships :IBattleships
     }
     public bool Attack(Point point)
     {
-        // foreach (var ship in Ships)
-        // {
-        //     if (ship.Positions.Contains(point))
-        //     {
-        //         ship.HP--;
-        //         point.Status = EPositionStatus.Hit;
-        //         if (ship.HP == 0)
-        //         {
-        //             ship.IsAlive = false;
-        //         }
-        //     }
-        //     else
-        //     {
-        //         point.Status = EPositionStatus.Miss;
-        //     }
-        // }
-
+        foreach (var ship in GetInactivePlayer().Field.Ships)
+        {
+            ActivePlayer.HasMoved = true;
+            if (ship.Positions.Contains(point))
+            {
+                ship.HP--;
+                point.Status = EPositionStatus.Hit;
+                if (ship.HP == 0)
+                {
+                    ship.IsAlive = false;
+                }
+                
+            }
+            else
+            {
+                
+                point.Status = EPositionStatus.Miss;
+                
+            }
+        }
+        ChangeTurns();
         return false; // TODO fix this
     }
 
     public void Draw()
     {
-        if(this.GamePhase == EPhase.GameOver)
+        if(this.GamePhase == EPhase.Playing && Players.Where(p => p.AcceptDraw).Count() == 2)
         {  
             this.Result = EResult.Draw;
             this.GamePhase = EPhase.NotStarted;

@@ -23,6 +23,7 @@ public class Player:IPlayer
     public void CreateField()
     {
         this.Field = new Field();
+        this.EnemyField = new Field();
     }
 
     public bool SetShip(IShip ship, List<Point> Points)
@@ -32,23 +33,21 @@ public class Player:IPlayer
         if (Points.Count() != ship.HP)
             return false;
         int i = 1;
-        Field.Ships.Add(ship);
-        UnplacedShips.Remove(ship);
         foreach (var point in Points)
         {
+            if(Field.FieldArr[point.GetIndex()] != null)
+                return false;
             ShipPart part = new ShipPart(ship, i);
             ship.ShipParts.Add(part);
             Field.FieldArr[point.GetIndex()] = part;
             i++;
         }
+        Field.Ships.Add(ship);
+        UnplacedShips.Remove(ship);
         
         return true;
     }
     
-    public void CreateEnemyField(IPlayer player)
-    {
-        this.EnemyField =  player.Field;
-    }
     public bool Attack(Point point)
     {
         // foreach (var ship in EnemyField.Ships)

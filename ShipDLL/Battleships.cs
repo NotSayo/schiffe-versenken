@@ -30,9 +30,7 @@ public class Battleships :IBattleships
     {
         Players[0].CreateField();
         Players[1].CreateField();
-
-        Players[0].CreateEnemyField(Players[1]);
-        Players[1].CreateEnemyField(Players[0]);
+        
     }
     
 
@@ -66,7 +64,7 @@ public class Battleships :IBattleships
     public bool SetShip(IShip ship, Point startPoint ,Point endPoint)
     {
        bool result = ActivePlayer.SetShip(ship, startPoint.CalculateBetweenPoints(endPoint));
-       if (ActivePlayer.UnplacedShips.Count() == 0) 
+       if (ActivePlayer.UnplacedShips.Count() == 0 && ActivePlayer == Players[0]) 
            ChangeActivePlayer();
        StartGame();
         
@@ -80,8 +78,7 @@ public class Battleships :IBattleships
 
     public void ChangeTurns()
     {
-        if(ActivePlayer.HasMoved) 
-            ChangeActivePlayer();
+        ChangeActivePlayer();
     }
 
     private void ChangeActivePlayer()
@@ -91,9 +88,11 @@ public class Battleships :IBattleships
 
     public void StartGame()
     {
-        if(this.GamePhase == EPhase.PlacingShips && Players[0].Field.Ships.Count == 4 && Players[1].Field.Ships.Count == 4 && Players[0].UnplacedShips.Count == 0 && Players[1].UnplacedShips.Count == 0)
+        if (this.GamePhase == EPhase.PlacingShips && Players[0].Field.Ships.Count == 4 && Players[1].Field.Ships.Count == 4 && Players[0].UnplacedShips.Count == 0 && Players[1].UnplacedShips.Count == 0)
+        {
+            ChangeTurns();
             this.GamePhase = EPhase.Playing;
-        
+        }
     }
 
     public void EndGame()

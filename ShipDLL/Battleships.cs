@@ -65,8 +65,15 @@ public class Battleships :IBattleships
 
     public bool SetShip(IShip ship, Point startPoint ,Point endPoint)
     {
-        return ActivePlayer.SetShip(ship, startPoint.CalculateBetweenPoints(endPoint));
-        throw new TooManyShipsExeption();
+        
+        
+       bool result = ActivePlayer.SetShip(ship, startPoint.CalculateBetweenPoints(endPoint));
+        if (ActivePlayer.UnplacedShips.Where(s => s.Type == ship.Type).Count() == 0)
+        {
+            this.ActivePlayer = Players.Where(p => p != ActivePlayer).First();
+        }
+
+        return result;
     }
 
     public void ChangeTurns()

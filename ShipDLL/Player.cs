@@ -28,8 +28,14 @@ public class Player:IPlayer
             return false;
         if (Points.Count() != ship.HP)
             return false;
-        if (Points.Where(p => p.X == Points[0].X).Count() != Points.Count()) //TODO make this work for Y
-            return false;
+        int i = 1;
+        Field.Ships.Add(ship);
+        UnplacedShips.Remove(ship);
+        foreach (var point in Points)
+        {
+            ship.NumberInSequence = i;
+            Field.FieldArr[point.GetIndex()] = ship;
+        }
         
         return true;
     }

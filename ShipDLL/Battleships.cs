@@ -44,9 +44,8 @@ public class Battleships :IBattleships
     public bool SetShip(IShip ship, Point startPoint ,Point endPoint)
     {
         bool result = ActivePlayer.SetShip(ship, startPoint.CalculateBetweenPoints(endPoint));
-
-        Console.WriteLine(result);
-        return false;
+        
+        return result;
         
         
         throw new NotImplementedException(); //TODO throw an Exception if there are too many ships or the ships are invalid. Either self made or ArgumentError

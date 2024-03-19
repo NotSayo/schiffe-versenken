@@ -52,6 +52,7 @@ public class Point
         return new Tuple<int, int>(X, Y);
     }
 
+    public int GetIndex() => Y * 10 + X;
     public override string ToString()
     {
         return $"({Y}, {X})";

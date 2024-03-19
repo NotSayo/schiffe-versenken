@@ -6,5 +6,5 @@ public interface IField
     public int LeftHP { get;  }
     public int LeftShips { get; }
     
-    public Point[,] FieldArr { get; set; }
+    public IShip[] FieldArr { get; set; }
 }

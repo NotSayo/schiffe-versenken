@@ -92,10 +92,10 @@
                      var tempint2 = i;
                      <a><div class="FieldPoint" @onclick="() => FieldClicked(tempint2)">
                          
-                         @* @if (ShipFields[tempint2] != null) //TODO returns 0, for some reason *@
+                         @* @if (game.Players[0].Field.FieldArr[tempint2] != null) //TODO returns 0, for some reason *@
                          @* { *@
                          @*     var j = i; *@
-                         @*     <img class="PlacedShip Placed @((ShipFields[j].Type)) @GetIndexFromSequence(ShipFields[j].Type, j)" src="Img/@(ShipFields[tempint2].Type).png"/> *@
+                         @*     <img class="PlacedShip Placed @((game.Players[0].Field.FieldArr[tempint2].Type)) @GetIndexFromSequence(ShipFields[j].Type, j)" src="Img/@(ShipFields[tempint2].Type).png"/> *@
                          @* } *@
                      </div></a>
                  }
@@ -147,20 +147,20 @@
 
     public void PlaceShip(EShip shipType)
     {
-        if (Phase != EPhase.PlacingShips)
+        if (game.GamePhase != EPhase.PlacingShips)
             return;
         if (ActiveShip == null)
         {
-            ActiveShip = Ships.Where(s => s.Type == shipType).FirstOrDefault();
+            ActiveShip = game.ActivePlayer.UnplacedShips.Where(s => s.Type == shipType).FirstOrDefault();
             return;
         }
 
         if (ActiveShip.Type != shipType)
         {
-            ActiveShip = Ships.Where(s => s.Type == shipType).FirstOrDefault();
+            ActiveShip = game.ActivePlayer.UnplacedShips.Where(s => s.Type == shipType).FirstOrDefault();
             return;
         }
-        ActivePlayer = null;
+        ActiveShip = null;
 
         // IShip ship = Ships.Where(s => s.Type == shipType).FirstOrDefault();
         // if (ship != null)
@@ -188,7 +188,7 @@
         Console.WriteLine("here");
         if (result == -1 || result == 0)
             return;
-        bool placingResult = TryPlacingShip();
+        bool placingResult = game.SetShip(ActiveShip, SelectedPoints[0], SelectedPoints[1]);
         Console.WriteLine(placingResult);
         
     }
@@ -228,8 +228,10 @@
 
     private int EnterPoint(int field)
     {
-        if (Phase != EPhase.PlacingShips || ActiveShip == null)
+        if (game.GamePhase != EPhase.PlacingShips || ActiveShip == null)
             return -1;
+        if (SelectedPoints == null)
+            SelectedPoints = new List<Point>();
         if (SelectedPoints.Count == 2)
         {
             Console.WriteLine(SelectedPoints[0] + " " + SelectedPoints[1]);

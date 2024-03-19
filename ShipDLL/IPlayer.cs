@@ -11,8 +11,6 @@ public interface IPlayer
     public IField EnemyField { get; set; }
     public void CreateField();
     public bool HasMoved { get; set; }
-    public void CreateEnemyField(IPlayer player);
     public bool Attack(Point point);
-
     public bool SetShip(IShip ship, List<Point> points);
 }

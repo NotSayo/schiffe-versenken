@@ -46,10 +46,7 @@ public class Point
         return points;
     }
         
-    public Tuple<int, int> GetPoint()
-    {
-        return new Tuple<int, int>(X, Y);
-    }
+    public Tuple<int, int> GetPoint() => new(X, Y);
 
     public int GetIndex() => Y * 10 + X;
     public override string ToString()

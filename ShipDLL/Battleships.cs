@@ -66,7 +66,7 @@ public class Battleships :IBattleships
     public bool SetShip(IShip ship, Point startPoint ,Point endPoint)
     {
        bool result = ActivePlayer.SetShip(ship, startPoint.CalculateBetweenPoints(endPoint));
-        if (ActivePlayer.UnplacedShips.Where(s => s.Type == ship.Type).Count() == 0) 
+        if (ActivePlayer.UnplacedShips.Count() == 0) 
             ChangeActivePlayer();
         return result;
     }
@@ -114,7 +114,7 @@ public class Battleships :IBattleships
     }
     public bool Attack(Point point)
     {
-        foreach (var ship in EnemyField.Ships)
+        foreach (var ship in .Ships)
         {
             if (ship.Positions.Contains(point))
             {

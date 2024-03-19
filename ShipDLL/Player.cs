@@ -46,25 +46,5 @@ public class Player:IPlayer
     {
         this.EnemyField =  player.Field;
     }
-    public bool Attack(Point point)
-    {
-        foreach (var ship in EnemyField.Ships)
-        {
-            if (ship.Positions.Contains(point))
-            {
-                ship.HP--;
-                point.Status = EPositionStatus.Hit;
-                if (ship.HP == 0)
-                {
-                    ship.IsAlive = false;
-                }
-            }
-            else
-            {
-                point.Status = EPositionStatus.Miss;
-            }
-        }
-
-        return false; // TODO fix this
-    }
+    
 }

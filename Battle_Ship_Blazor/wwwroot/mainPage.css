@@ -73,4 +73,16 @@
     grid-template-columns: 20% 30% 50%;
 }
 
+.backgroundHit  {
+    background-color: darkred;
+}
+
+.backgroundMiss {
+    background-color: yellow;
+}
+
+.backgroundEmpty {
+    background-color: yellowgreen;
+}
+
 

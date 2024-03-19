@@ -30,43 +30,24 @@ public class Player:IPlayer
     { 
         if (UnplacedShips.Where(s => s.Type == ship.Type).Count() == 0)
             return false;
-        if (Points.Count() != ship.HP)
+        if (Points.Count() != (int)ship.Type)
             return false;
         int i = 1;
         foreach (var point in Points)
         {
-            if(Field.FieldArr[point.GetIndex()] != null)
+            if(Field.FieldArr[point.GetIndex()].ShipPart != null)
                 return false;
             ShipPart part = new ShipPart(ship, i);
             ship.ShipParts.Add(part);
-            Field.FieldArr[point.GetIndex()] = part;
+            Field.FieldArr[point.GetIndex()].ShipPart = part;
+            Field.FieldArr[point.GetIndex()].Status = EPositionStatus.Ship;
             i++;
         }
         Field.Ships.Add(ship);
         UnplacedShips.Remove(ship);
+        ship.UpdateHP();
         
         return true;
     }
     
-    public bool Attack(Point point)
-    {
-        // foreach (var ship in EnemyField.Ships)
-        // {
-        //     if (ship.Positions.Contains(point))
-        //     {
-        //         ship.HP--;
-        //         point.Status = EPositionStatus.Hit;
-        //         if (ship.HP == 0)
-        //         {
-        //             ship.IsAlive = false;
-        //         }
-        //     }
-        //     else
-        //     {
-        //         point.Status = EPositionStatus.Miss;
-        //     }
-        // }
-
-        return false; // TODO fix this
-    }
 }

@@ -4,19 +4,33 @@ namespace ShipDLL;
 
 public class Ship : IShip
 {
-    public int HP { get; set; }
+
+    private int hp;
+    public int HP
+    {
+        get => hp;
+        set => hp = value;
+
+    }
     public EShip Type { get; set; }
     public bool IsAlive { get; set; }
     public Point[] Positions { get; set; }
     
     public List<ShipPart> ShipParts { get; set; }
 
+    public int UpdateHP()
+    {
+        HP = ShipParts.Where(s => s.IsAlive).Count();
+        if(HP == 0)
+            IsAlive = false;
+        return HP;
+    }
+
     public Ship(EShip type)
     {
         this.Type = type;
         IsAlive = true;
-
-        HP = (int) type;
+        
         ShipParts = new List<ShipPart>();
 
         // switch (type)

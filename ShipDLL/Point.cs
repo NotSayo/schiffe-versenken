@@ -10,7 +10,7 @@ public class Point
     public EPositionStatus Status { get; set; }
     public int X { get; set; }
     public int Y { get; set; }
-    public bool HasShip { get; set; }
+    public ShipPart ShipPart { get; set; }
 
     public Point() {}
 

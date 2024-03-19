@@ -73,7 +73,7 @@ public class Battleships :IBattleships
 
     private IPlayer GetInactivePlayer()
     {
-        return this.ActivePlayer = Players.Where(p => p != ActivePlayer).First();
+        return Players.Where(p => p != ActivePlayer).First();
     }
 
     public void ChangeTurns()
@@ -83,7 +83,7 @@ public class Battleships :IBattleships
 
     private void ChangeActivePlayer()
     {
-        GetInactivePlayer();
+        ActivePlayer =  GetInactivePlayer();
     }
 
     public void StartGame()
@@ -120,28 +120,24 @@ public class Battleships :IBattleships
     }
     public bool Attack(Point point)
     {
-        foreach (var ship in GetInactivePlayer().Field.Ships)
+        if(GetInactivePlayer().Field.FieldArr[point.GetIndex()].Status != EPositionStatus.Empty && GetInactivePlayer().Field.FieldArr[point.GetIndex()].Status != EPositionStatus.Ship)
+            return false;
+        if (GetInactivePlayer().Field.FieldArr[point.GetIndex()].ShipPart == null)
         {
-            ActivePlayer.HasMoved = true;
-            if (ship.Positions.Contains(point))
-            {
-                ship.HP--;
-                point.Status = EPositionStatus.Hit;
-                if (ship.HP == 0)
-                {
-                    ship.IsAlive = false;
-                }
-                
-            }
-            else
-            {
-                
-                point.Status = EPositionStatus.Miss;
-                
-            }
+            GetInactivePlayer().Field.FieldArr[point.GetIndex()].Status = EPositionStatus.Miss;
+            ActivePlayer.EnemyField.FieldArr[point.GetIndex()] = GetInactivePlayer().Field.FieldArr[point.GetIndex()];
+            ChangeTurns();
+            return false;
         }
-        ChangeTurns();
-        return false; // TODO fix this
+        else
+        {
+            GetInactivePlayer().Field.FieldArr[point.GetIndex()].Status = EPositionStatus.Hit;
+            GetInactivePlayer().Field.FieldArr[point.GetIndex()].ShipPart.OnHit();
+            ActivePlayer.EnemyField.FieldArr[point.GetIndex()] = GetInactivePlayer().Field.FieldArr[point.GetIndex()];
+            ChangeTurns();
+            return true;
+        }
+        
     }
 
     public void Draw()

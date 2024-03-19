@@ -123,6 +123,7 @@ public class Battleships :IBattleships
     {
         foreach (var ship in GetInactivePlayer().Field.Ships)
         {
+            ActivePlayer.HasMoved = true;
             if (ship.Positions.Contains(point))
             {
                 ship.HP--;
@@ -135,16 +136,17 @@ public class Battleships :IBattleships
             }
             else
             {
+                
                 point.Status = EPositionStatus.Miss;
+                
             }
         }
-
+        ChangeTurns();
         return false; // TODO fix this
     }
 
     public void Draw()
     {
-        //todo Accept Draw
         if(this.GamePhase == EPhase.Playing && Players.Where(p => p.AcceptDraw).Count() == 2)
         {  
             this.Result = EResult.Draw;

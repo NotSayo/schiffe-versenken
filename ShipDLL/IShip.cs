@@ -2,11 +2,11 @@
 
 public interface IShip
 {
-    public IAbility Ability { get; set; }
-    public int HP { get; set; }
+    public int HP { get; }
     public EShip Type { get; set; }
     public bool IsAlive { get; set; }
     public Point[] Positions { get; set; }
+    public int UpdateHP();
     
     public List<ShipPart> ShipParts { get; set; }
 }

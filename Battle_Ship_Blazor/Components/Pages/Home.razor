@@ -23,26 +23,21 @@
                         <div>@ship.Type , @((int)@ship.Type)</div>
                     </div>
                 }
-                <!-- TEMPLATE -->
-                @* <div class="Placing_Ship"> *@
-                @*     <img src="./Img/5_HP.png"/> *@
-                @*     <div>Name</div> *@
-                @* </div> *@
             </div>
         }
         else
         {
             <div class="Stats_Entry">
                 <div class="Stats_Text">Left HP:</div>
-                <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+                <div class="Stats_Stat"> @game.Players[0].Field.LeftHP</div> <!-- TODO Backend -->
             </div>
             <div class="Stats_Entry">
                 <div class="Stats_Text">Left Ships:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+                <div class="Stats_Stat"> @game.Players[0].Field.LeftShips</div> <!-- TODO Backend -->
             </div>
             <div class="Stats_Entry">
                 <div class="Stats_Text">Attacks:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat">xx </div> <!-- TODO Backend -->
+                <div class="Stats_Stat">xx</div> <!-- TODO Backend -->
             </div>
             <div class="Stats_Entry">
                 <div class="Stats_Text">Misses:</div> <!-- TODO Backend -->
@@ -53,7 +48,7 @@
                 <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
             </div>
             <div class="Stats_Buttons">
-                 <button class="Stats_draw" @onclick="StartGame">Start Placing</button> @* TODO change that back to draw *@
+                 <button class="Stats_draw">Request a Draw</button> <!-- TODO Backend -->
                 <button class="Stats_surrender">Surrender</button>
             </div>
         }
@@ -77,11 +72,11 @@
         {
             <div class="Stats_Entry">
                 <div class="Stats_Text">Left HP:</div>
-                <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+                <div class="Stats_Stat"> @game.Players[1].Field.LeftHP</div> <!-- TODO Backend -->
             </div>
             <div class="Stats_Entry">
                 <div class="Stats_Text">Left Ships:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+                <div class="Stats_Stat"> @game.Players[1].Field.LeftShips</div> <!-- TODO Backend -->
             </div>
             <div class="Stats_Entry">
                 <div class="Stats_Text">Attacks:</div> <!-- TODO Backend -->
@@ -96,7 +91,7 @@
                 <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
             </div>
             <div class="Stats_Buttons">
-                 <button class="Stats_draw" @onclick="StartGame">Start Placing</button> @* TODO change that back to draw *@
+                <button class="Stats_draw">Request a Draw</button> <!-- TODO Backend -->
                 <button class="Stats_surrender">Surrender</button>
             </div>
         }
@@ -104,51 +99,79 @@
     
     <div id="MainBoard">
         <div class="FieldEntry">
-            @if (game == null)
-             { 
-                 <div>Loading</div>
-             }
-             else
+             @if (game.ActivePlayer == game.Players[1])
              {
                  @for (int i = 0; i < 100; i++)
                  {
                      var tempint2 = i;
-                     <a><div class="FieldPoint" @onclick="() => FieldClicked(tempint2, 2)">
-                         
-                         @if (game.Players[1].Field.FieldArr[tempint2] != null) //TODO returns 0, for some reason
+                     <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[1].Field.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 2)">
+                     
+                         @if (game.Players[1].Field.FieldArr[tempint2].ShipPart != null)
                          {
-                             var j = game.Players[1].Field.FieldArr[tempint2].NumberInSequence;
-                             <img class="PlacedShip Placed @((game.Players[1].Field.FieldArr[tempint2].Parent.Type) + "" + j)" src="Img/@(game.Players[1].Field.FieldArr[tempint2].Parent.Type).png"/>
+                             var j = game.Players[1].Field.FieldArr[tempint2].ShipPart.NumberInSequence;
+                             <img class="PlacedShip Placed @((game.Players[1].Field.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[1].Field.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
                          }
                      </div></a>
                  }
              }
+             else
+             {
+                 @for (int i = 0; i < 100; i++)
+                 {
+                     var tempint2 = i;
+                     <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[0].EnemyField.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 2)">
+                         @if (game.Players[0].EnemyField.FieldArr[tempint2].ShipPart != null)
+                         {
+                             var j = game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.NumberInSequence;
+                             <img class="PlacedShip Placed @((game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
+                         }
+                     </div></a>
+                 }
+             }
+             
         </div>
          <div class="FieldEntry">
-             @if (game == null)
-             { 
-                 <div>Loading</div>
+             @if (game.ActivePlayer == game.Players[0])
+             {
+                 @for (int i = 0; i < 100; i++)
+                 {
+                     var tempint2 = i;
+                     <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[0].Field.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 1)">
+                     
+                         @if (game.Players[0].Field.FieldArr[tempint2].ShipPart != null)
+                         {
+                             var j = game.Players[0].Field.FieldArr[tempint2].ShipPart.NumberInSequence;
+                             <img class="PlacedShip Placed @((game.Players[0].Field.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[0].Field.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
+                         }
+                     </div></a>
+                 }
              }
              else
              {
                  @for (int i = 0; i < 100; i++)
                  {
                      var tempint2 = i;
-                     <a><div class="FieldPoint" @onclick="() => FieldClicked(tempint2, 1)">
-                         
-                         @if (game.Players[0].Field.FieldArr[tempint2] != null) //TODO returns 0, for some reason
-                         {
-                             var j = game.Players[0].Field.FieldArr[tempint2].NumberInSequence;
-                             <img class="PlacedShip Placed @((game.Players[0].Field.FieldArr[tempint2].Parent.Type) + "" + j)" src="Img/@(game.Players[0].Field.FieldArr[tempint2].Parent.Type).png"/>
-                         }
-                     </div></a>
+                     <a>
+                         <div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[1].EnemyField.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 1)">
+
+                             @if (game.Players[1].EnemyField.FieldArr[tempint2].ShipPart != null)
+                             {
+                                 var j = game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.NumberInSequence;
+                                 <img class="PlacedShip Placed @((game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
+                             }
+                        </div></a>
                  }
              }
         </div>
     </div>  
     
     <div id="controls">
-            
+        <div>Round: @game.Round</div>
+        <div>Active Player: @game.ActivePlayer.ID</div>
+        <div class="controls_buttons">
+            <button class="Stats_draw" @onclick="StartGame">Start Placing</button>
+            <button @onclick="game.ChangeTurns">Change Turn</button>
+        </div>
     </div>
     
 </div>
@@ -156,35 +179,20 @@
 
 @code {
     private Battleships game { get; set; } = new Battleships();
-    
-    public EPhase Phase { get; set; }
-    public IPlayer ActivePlayer { get; set; }
-    public List<IPlayer> Players { get; set; }
-    public List<IShip> Ships { get; set; }
-    public IShip[] ShipFields { get; set; }
     public List<Point> SelectedPoints { get; set; }
-    
     public IShip ActiveShip { get; set; }
     
     protected override void OnInitialized()
     {
         game = new Battleships();
         game.CreateGame();
+        SelectedPoints = new List<Point>();
 
 
         return;
-        Phase = EPhase.NotStarted;
-        Players = new List<IPlayer>() { new Player(), new Player() };
-        ActivePlayer = Players[0];
-
-        Ships = new List<IShip>() {new Ship(EShip.Battleship), new Ship(EShip.Destroyer), new Ship(EShip.Submarine), new Ship(EShip.CruiseShip) };
-        Ships = Ships.OrderByDescending(Type => Type.Type).ToList();
-        
-        ShipFields = new IShip[100];
-        SelectedPoints = new List<Point>();
     }
     
-    public void StartGame() // TODO connect to Backend
+    public void StartGame()
     {
         game.StartPlacingShips();
     }
@@ -205,72 +213,37 @@
             return;
         }
         ActiveShip = null;
-
-        // IShip ship = Ships.Where(s => s.Type == shipType).FirstOrDefault();
-        // if (ship != null)
-        // {
-        //     //game.PlaceShip(ship, ActivePlayer);
-        //     Ships.Remove(ship);
-        //     CheckPlacingEnd();
-    }
-
-    public void CheckPlacingEnd()
-    {
-        if (Ships.Count != 0)
-            return;
-        if (ActivePlayer != Players[1])
-        {
-            ActivePlayer = Players[1];
-            return;
-        }
-        Phase = EPhase.Playing;
-    }
-
-    public void FieldClicked(int field, int PlayerID)
-    {
-        if(game.ActivePlayer.ID != PlayerID)
-            return;
-        var result = EnterPoint(field);
-        Console.WriteLine("here");
-        if (result == -1 || result == 0)
-            return;
-        bool placingResult = game.SetShip(ActiveShip, SelectedPoints[0], SelectedPoints[1]);
-        Console.WriteLine(placingResult);
         
     }
     
-    private bool TryPlacingShip() //TODO Split?
-    {
-        SelectedPoints = SelectedPoints.OrderBy(s => s.X).ToList();
 
-        game.SetShip(ActiveShip, SelectedPoints[0], SelectedPoints[1]);
+    public void FieldClicked(int field, int PlayerID)
+    {
+        if (game.GamePhase == EPhase.PlacingShips)
+        {
+            if(game.ActivePlayer.ID != PlayerID)
+                return;
+            var result = EnterPoint(field);
+            Console.WriteLine("here");
+            if (result == -1 || result == 0)
+                return;
+            bool placingResult = game.SetShip(ActiveShip, SelectedPoints[0], SelectedPoints[1]);
+            SelectedPoints = new List<Point>();
+            Console.WriteLine(placingResult);
+        }
+        else if (game.GamePhase == EPhase.Playing)
+        {
+            if (game.ActivePlayer.ID == PlayerID)
+                return;
+            var result = game.Attack(new Point(field % 10, (int)field / 10));
+            Console.WriteLine(result);
+        }
+        
+
         
         
-        return false;
-        
-        
-        // double distance = Math.Abs(SelectedPoints[0].CalculateDistance(SelectedPoints[1]));
-        // Console.WriteLine(distance);
-        //
-        // if (distance == (double) ActiveShip.HP)
-        // {
-        //     Console.WriteLine("Ship can be placed");
-        //     Ships.Remove(ActiveShip);
-        //     int Field = SelectedPoints[0].Y * 10 + SelectedPoints[0].X;
-        //     int Field2 = SelectedPoints[1].Y * 10 + SelectedPoints[1].X;
-        //     List<Point> betweenPoints = CalculateBetweenPoints(SelectedPoints[0], SelectedPoints[1]);
-        //     foreach (var point in betweenPoints)
-        //     {
-        //         ShipFields[point.Y * 10 + point.X] = ActiveShip;
-        //     }
-        //     ActiveShip = null;
-        //     CheckPlacingSwitch();
-        //     
-        //     return true;
-        // }
-        //
-        // return false;
     }
+    
 
     private int EnterPoint(int field)
     {
@@ -293,39 +266,13 @@
         return 0;
     }
 
-    private void CheckPlacingSwitch()
+    private string CheckIfClicked(int field)
     {
-        if(Ships.Count ==  0)
-            SwitchActivePlayer();
+        if (SelectedPoints.Count == 0)
+            return "";
+        if (SelectedPoints[0].GetIndex() == field)
+            return "clickedField";
+        return "";
     }
     
-    private void SwitchActivePlayer()
-    {
-        if (ActivePlayer == Players[0])
-            ActivePlayer = Players[1];
-        else
-            ActivePlayer = Players[0];
-    }
-
-    public Point GetPointFromField(int field)
-    {
-        return new Point(field % 10, (int)Math.Floor((double)field / 10));
-    }
-    
-
-    public int GetIndexFromSequence(EShip type, int field)
-    {
-        int index = 0;
-        for (; field > 0; field--)
-        {
-            if (ShipFields[field] == null)
-                return index;
-            if (ShipFields[field].Type == type)
-                index++;
-            else
-                return index;
-        }
-
-        return default;
-    }
 }

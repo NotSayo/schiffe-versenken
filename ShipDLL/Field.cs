@@ -2,7 +2,7 @@
 
 public class Field :IField
 {
-    public ShipPart[] FieldArr { get; set; }
+    public Point[] FieldArr { get; set; }
     public List<IShip> Ships { get; set; }
 
     public int LeftHP
@@ -19,11 +19,18 @@ public class Field :IField
         }
     }
 
-    public int LeftShips => Ships.Count;
+    public int LeftShips
+    {
+        get => Ships.Where(s => s.IsAlive).Count();
+    }
 
     public Field()
     {
-        FieldArr = new ShipPart[100];
+        FieldArr = new Point[100];
+        for (int i = 0; i < 100; i++)
+        {
+            FieldArr[i] = new Point(i % 10, i / 10) {Status = EPositionStatus.Empty};
+        }
 
         Ships = new List<IShip>();
     }

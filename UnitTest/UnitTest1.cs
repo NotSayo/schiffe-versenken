@@ -29,6 +29,7 @@ public class Tests
     {
         _gameController = new Battleships();
         _gameController.CreateGame();
+        _gameController.StartPlacingShips();
         Assert.That(_gameController.GamePhase == EPhase.PlacingShips);
     }
 
@@ -47,28 +48,13 @@ public class Tests
         _gameController.CreateGame();
         var ships = new List<IShip>()
         {
-            new Ship()
-            {
-                HP = 4, IsAlive = true, Type = EShip.Battleship,
-                Positions = new[] { new Point(0, 0), new Point(0, 1), new Point(0, 2), new Point(0, 3) }
-            },
-            new Ship()
-            {
-                HP = 4, IsAlive = true, Type = EShip.Battleship,
-                Positions = new[] { new Point(3, 0), new Point(3, 1), new Point(3, 2), new Point(3, 3) }
-            },
-            new Ship()
-            {
-                HP = 4, IsAlive = true, Type = EShip.Battleship,
-                Positions = new[] { new Point(5, 0), new Point(5, 1), new Point(5, 2), new Point(5, 3) }
-            },
-            new Ship()
-            {
-                HP = 4, IsAlive = true, Type = EShip.Battleship,
-                Positions = new[] { new Point(7, 0), new Point(7, 1), new Point(7, 2), new Point(7, 3) }
-            },
+            new Ship( EShip.Battleship ),
+            new Ship(EShip.GorlockTheDestroyer),
+            new Ship(EShip.OceanGate_Submarine),
+            new Ship(EShip.CruiseShip)
+          
         };
-        _gameController.SetShips(_gameController.ActivePlayer, new List<IShip>());
+        _gameController.StartPlacingShips();
         Assert.That(_gameController.ActivePlayer.Field.Ships.Count, Is.EqualTo(4));
     }
 
@@ -110,30 +96,9 @@ public class Tests
     [Test]
     public void CheckIfTypeAndHPMatch()
     {
-        _gameController.CreateGame();
-        var ships = new List<IShip>()
-        {
-            new Ship()
-            {
-                HP = 5, IsAlive = true, Type = EShip.Destroyer,
-                Positions = new[] { new Point(0, 0), new Point(0, 1), new Point(0, 2), new Point(0, 3), new Point(0, 3) }
-            },
-            new Ship()
-            {
-                HP = 4, IsAlive = true, Type = EShip.Battleship,
-                Positions = new[] { new Point(3, 0), new Point(3, 1), new Point(3, 2), new Point(3, 3) }
-            },
-            new Ship()
-            {
-                HP = 3, IsAlive = true, Type = EShip.CruiseShip,
-                Positions = new[] { new Point(5, 0), new Point(5, 1), new Point(5, 2) }
-            },
-            new Ship()
-            {
-                HP = 2, IsAlive = true, Type = EShip.Submarine,
-                Positions = new[] { new Point(7, 0), new Point(7, 1) }
-            },
-        };
+        _gameController.StartPlacingShips();
+        
+        
         Assert.That(_gameController.ActivePlayer.Field.Ships.Count, Is.EqualTo(4));
         Assert.That(_gameController.ActivePlayer.Field.Ships[0].HP == 5);
         Assert.That(_gameController.ActivePlayer.Field.Ships[1].HP == 4);
@@ -171,26 +136,11 @@ public class Tests
         _gameController.CreateGame();
         var ships = new List<IShip>()
         {
-            new Ship()
-            {
-                HP = 5, IsAlive = true, Type = EShip.Destroyer,
-                Positions = new[] { new Point(0, 0), new Point(0, 1), new Point(0, 2), new Point(0, 3), new Point(0, 3) }
-            },
-            new Ship()
-            {
-                HP = 4, IsAlive = true, Type = EShip.Battleship,
-                Positions = new[] { new Point(3, 0), new Point(3, 1), new Point(3, 2), new Point(3, 3) }
-            },
-            new Ship()
-            {
-                HP = 3, IsAlive = true, Type = EShip.CruiseShip,
-                Positions = new[] { new Point(5, 0), new Point(5, 1), new Point(5, 2) }
-            },
-            new Ship()
-            {
-                HP = 2, IsAlive = true, Type = EShip.Submarine,
-                Positions = new[] { new Point(7, 0), new Point(7, 1) }
-            },
+            new Ship( EShip.Battleship ),
+            new Ship(EShip.GorlockTheDestroyer),
+            new Ship(EShip.OceanGate_Submarine),
+            new Ship(EShip.CruiseShip)
+          
         };
         
         Assert.That(_gameController.ActivePlayer.Field.Ships[0].Positions.Length, Is.EqualTo(5));
@@ -220,11 +170,12 @@ public class Tests
     [Test]
     public void CheckWrongAttack()
     {
-        _gameController.CreateGame();
-        Assert.IsFalse(_gameController.ActivePlayer.Attack(new Point(-4,-4)));
-        Assert.IsFalse(_gameController.ActivePlayer.Attack(new Point(15,4)));
-        Assert.IsFalse(_gameController.ActivePlayer.Attack(new Point(4,15)));
-        Assert.IsFalse(_gameController.ActivePlayer.Attack(new Point(7,-5)));
+        _gameController.StartPlacingShips();
+        _gameController.StartGame();
+        Assert.IsFalse(_gameController.Attack(new Point(-4,-4)));
+        Assert.IsFalse(_gameController.Attack(new Point(15,4)));
+        Assert.IsFalse(_gameController.Attack(new Point(4,15)));
+        Assert.IsFalse(_gameController.Attack(new Point(7,-5)));
     }
     
     [Test]
@@ -233,35 +184,15 @@ public class Tests
         _gameController.CreateGame();
         var ships = new List<IShip>()
         {
-            new Ship()
-            {
-                HP = 4, IsAlive = true, Type = EShip.Battleship,
-                Positions = new[] { new Point(0, 0), new Point(0, 1), new Point(0, 2), new Point(0, 3) }
-            },
-            new Ship()
-            {
-                HP = 4, IsAlive = true, Type = EShip.Battleship,
-                Positions = new[] { new Point(3, 0), new Point(3, 1), new Point(3, 2), new Point(3, 3) }
-            },
-            new Ship()
-            {
-                HP = 4, IsAlive = true, Type = EShip.Battleship,
-                Positions = new[] { new Point(5, 0), new Point(5, 1), new Point(5, 2), new Point(5, 3) }
-            },
-            new Ship()
-            {
-                HP = 4, IsAlive = true, Type = EShip.Battleship,
-                Positions = new[] { new Point(7, 0), new Point(7, 1), new Point(7, 2), new Point(7, 3) }
-            },
-            new Ship()
-            {
-                HP = 4, IsAlive = true, Type = EShip.Battleship,
-                Positions = new[] { new Point(7, 0), new Point(7, 1), new Point(7, 2), new Point(7, 3) }
-            },
+            new Ship( EShip.Battleship ),
+            new Ship(EShip.GorlockTheDestroyer),
+            new Ship(EShip.OceanGate_Submarine),
+            new Ship(EShip.CruiseShip)
+          
         };
         try
         {
-            _gameController.SetShips(_gameController.ActivePlayer, new List<IShip>());
+            _gameController.StartPlacingShips();
             Assert.Fail();
         }
         catch (Exception e)
@@ -269,14 +200,6 @@ public class Tests
             Assert.Pass();
         }
     }
-
-    [Test]
-    public void CheckStartGame()
-    {
-        _gameController.CreateGame();
-        Assert.IsFalse(_gameController.StartGame());
-    }
-
     [Test]
     public void CheckSurrenderEndGame()
     {

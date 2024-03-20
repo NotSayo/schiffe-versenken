@@ -10,7 +10,7 @@ public class Point
     public EPositionStatus Status { get; set; }
     public int X { get; set; }
     public int Y { get; set; }
-    public bool HasShip { get; set; }
+    public ShipPart ShipPart { get; set; }
 
     public Point() {}
 
@@ -46,10 +46,7 @@ public class Point
         return points;
     }
         
-    public Tuple<int, int> GetPoint()
-    {
-        return new Tuple<int, int>(X, Y);
-    }
+    public Tuple<int, int> GetPoint() => new(X, Y);
 
     public int GetIndex() => Y * 10 + X;
     public override string ToString()

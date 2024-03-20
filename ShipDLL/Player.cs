@@ -15,7 +15,7 @@ public class Player:IPlayer
     {
         UnplacedShips = new List<IShip>()
         {
-            new Ship(EShip.Battleship), new Ship(EShip.Destroyer), new Ship(EShip.Submarine), new Ship(EShip.CruiseShip)
+            new Ship(EShip.Battleship), new Ship(EShip.GorlockTheDestroyer), new Ship(EShip.OceanGate_Submarine), new Ship(EShip.CruiseShip)
         };
         HasWon = false; 
     }
@@ -23,51 +23,31 @@ public class Player:IPlayer
     public void CreateField()
     {
         this.Field = new Field();
+        this.EnemyField = new Field();
     }
 
     public bool SetShip(IShip ship, List<Point> Points)
     { 
         if (UnplacedShips.Where(s => s.Type == ship.Type).Count() == 0)
             return false;
-        if (Points.Count() != ship.HP)
+        if (Points.Count() != (int)ship.Type)
             return false;
         int i = 1;
-        Field.Ships.Add(ship);
-        UnplacedShips.Remove(ship);
         foreach (var point in Points)
         {
+            if(Field.FieldArr[point.GetIndex()].ShipPart != null)
+                return false;
             ShipPart part = new ShipPart(ship, i);
             ship.ShipParts.Add(part);
-            Field.FieldArr[point.GetIndex()] = part;
+            Field.FieldArr[point.GetIndex()].ShipPart = part;
+            Field.FieldArr[point.GetIndex()].Status = EPositionStatus.Ship;
             i++;
         }
+        Field.Ships.Add(ship);
+        UnplacedShips.Remove(ship);
+        ship.UpdateHP();
         
         return true;
     }
     
-    public void CreateEnemyField(IPlayer player)
-    {
-        this.EnemyField =  player.Field;
-    }
-    public bool Attack(Point point)
-    {
-        // foreach (var ship in EnemyField.Ships)
-        // {
-        //     if (ship.Positions.Contains(point))
-        //     {
-        //         ship.HP--;
-        //         point.Status = EPositionStatus.Hit;
-        //         if (ship.HP == 0)
-        //         {
-        //             ship.IsAlive = false;
-        //         }
-        //     }
-        //     else
-        //     {
-        //         point.Status = EPositionStatus.Miss;
-        //     }
-        // }
-
-        return false; // TODO fix this
-    }
 }

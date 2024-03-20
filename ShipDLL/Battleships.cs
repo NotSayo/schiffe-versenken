@@ -30,9 +30,7 @@ public class Battleships :IBattleships
     {
         Players[0].CreateField();
         Players[1].CreateField();
-
-        Players[0].CreateEnemyField(Players[1]);
-        Players[1].CreateEnemyField(Players[0]);
+        
     }
     
 
@@ -66,7 +64,7 @@ public class Battleships :IBattleships
     public bool SetShip(IShip ship, Point startPoint ,Point endPoint)
     {
        bool result = ActivePlayer.SetShip(ship, startPoint.CalculateBetweenPoints(endPoint));
-       if (ActivePlayer.UnplacedShips.Count() == 0) 
+       if (ActivePlayer.UnplacedShips.Count() == 0 && ActivePlayer == Players[0]) 
            ChangeActivePlayer();
        StartGame();
         
@@ -75,13 +73,12 @@ public class Battleships :IBattleships
 
     private IPlayer GetInactivePlayer()
     {
-        return this.ActivePlayer = Players.Where(p => p != ActivePlayer).First();
+        return Players.Where(p => p != ActivePlayer).First();
     }
 
     public void ChangeTurns()
     {
-        if(ActivePlayer.HasMoved) 
-            ChangeActivePlayer();
+        ChangeActivePlayer();
     }
 
     public void Move(IShip targetShip, Point EndPoint)
@@ -91,14 +88,16 @@ public class Battleships :IBattleships
 
     private void ChangeActivePlayer()
     {
-        GetInactivePlayer();
+        ActivePlayer =  GetInactivePlayer();
     }
 
     public void StartGame()
     {
-        if(this.GamePhase == EPhase.PlacingShips && Players[0].Field.Ships.Count == 4 && Players[1].Field.Ships.Count == 4 && Players[0].UnplacedShips.Count == 0 && Players[1].UnplacedShips.Count == 0)
+        if (this.GamePhase == EPhase.PlacingShips && Players[0].Field.Ships.Count == 4 && Players[1].Field.Ships.Count == 4 && Players[0].UnplacedShips.Count == 0 && Players[1].UnplacedShips.Count == 0)
+        {
+            ChangeTurns();
             this.GamePhase = EPhase.Playing;
-        
+        }
     }
 
     public void EndGame()
@@ -126,28 +125,24 @@ public class Battleships :IBattleships
     }
     public bool Attack(Point point)
     {
-        foreach (var ship in GetInactivePlayer().Field.Ships)
+        if(GetInactivePlayer().Field.FieldArr[point.GetIndex()].Status != EPositionStatus.Empty && GetInactivePlayer().Field.FieldArr[point.GetIndex()].Status != EPositionStatus.Ship)
+            return false;
+        if (GetInactivePlayer().Field.FieldArr[point.GetIndex()].ShipPart == null)
         {
-            ActivePlayer.HasMoved = true;
-            if (ship.Positions.Contains(point))
-            {
-                ship.HP--;
-                point.Status = EPositionStatus.Hit;
-                if (ship.HP == 0)
-                {
-                    ship.IsAlive = false;
-                }
-                
-            }
-            else
-            {
-                
-                point.Status = EPositionStatus.Miss;
-                
-            }
+            GetInactivePlayer().Field.FieldArr[point.GetIndex()].Status = EPositionStatus.Miss;
+            ActivePlayer.EnemyField.FieldArr[point.GetIndex()] = GetInactivePlayer().Field.FieldArr[point.GetIndex()];
+            ChangeTurns();
+            return false;
         }
-        ChangeTurns();
-        return false; // TODO fix this
+        else
+        {
+            GetInactivePlayer().Field.FieldArr[point.GetIndex()].Status = EPositionStatus.Hit;
+            GetInactivePlayer().Field.FieldArr[point.GetIndex()].ShipPart.OnHit();
+            ActivePlayer.EnemyField.FieldArr[point.GetIndex()] = GetInactivePlayer().Field.FieldArr[point.GetIndex()];
+            ChangeTurns();
+            return true;
+        }
+        
     }
 
     public void Draw()

@@ -52,16 +52,37 @@
 .PlacedShip {
     width: 100%;
     height: 100%;
+} 
+
+.clickedField {
+    background-color: cyan;
 }
 
-.PlacedSubmarine1 {
-    clip-path: inset(0 50% 0 0);
+/*.Submarine1 {*/
+/*    clip-path: inset(0 50% 0 0);*/
+/*}*/
+
+/*.Submarine2 {*/
+/*    clip-path: inset(0 0 0 50% );*/
+/*}*/
+
+
+#controls {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 20% 30% 50%;
 }
 
-.PlacedSubmarine2 {
-    width: 400%;
-    height: 100%;
-    clip-path: inset(0 0 0 50% );
+.backgroundHit  {
+    background-color: darkred;
+}
+
+.backgroundMiss {
+    background-color: yellow;
+}
+
+.backgroundEmpty {
+    background-color: yellowgreen;
 }
 
 

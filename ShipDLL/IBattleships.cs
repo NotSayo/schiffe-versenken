@@ -11,9 +11,9 @@ public interface IBattleships
     public bool GameOver(); 
     public bool SetShip(IShip ship, Point startPoint ,Point endPoint);
     public void ChangeTurns();
-    public void Move();
+    public bool StartPlacingShips();
     public void StartGame();
-
+    public bool Attack(Point point);
     public void EndGame();
 
     public void Surrender();

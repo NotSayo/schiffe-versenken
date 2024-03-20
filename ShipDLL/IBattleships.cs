@@ -13,7 +13,7 @@ public interface IBattleships
     public void ChangeTurns();
     public bool StartPlacingShips();
     public void StartGame();
-
+    public bool Attack(Point point);
     public void EndGame();
 
     public void Surrender();

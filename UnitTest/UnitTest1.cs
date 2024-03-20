@@ -49,8 +49,8 @@ public class Tests
         var ships = new List<IShip>()
         {
             new Ship( EShip.Battleship ),
-            new Ship(EShip.Destroyer),
-            new Ship(EShip.Submarine),
+            new Ship(EShip.GorlockTheDestroyer),
+            new Ship(EShip.OceanGate_Submarine),
             new Ship(EShip.CruiseShip)
           
         };
@@ -137,8 +137,8 @@ public class Tests
         var ships = new List<IShip>()
         {
             new Ship( EShip.Battleship ),
-            new Ship(EShip.Destroyer),
-            new Ship(EShip.Submarine),
+            new Ship(EShip.GorlockTheDestroyer),
+            new Ship(EShip.OceanGate_Submarine),
             new Ship(EShip.CruiseShip)
           
         };
@@ -170,11 +170,12 @@ public class Tests
     [Test]
     public void CheckWrongAttack()
     {
-        _gameController.CreateGame();
-        Assert.IsFalse(_gameController.ActivePlayer.Attack(new Point(-4,-4)));
-        Assert.IsFalse(_gameController.ActivePlayer.Attack(new Point(15,4)));
-        Assert.IsFalse(_gameController.ActivePlayer.Attack(new Point(4,15)));
-        Assert.IsFalse(_gameController.ActivePlayer.Attack(new Point(7,-5)));
+        _gameController.StartPlacingShips();
+        _gameController.StartGame();
+        Assert.IsFalse(_gameController.Attack(new Point(-4,-4)));
+        Assert.IsFalse(_gameController.Attack(new Point(15,4)));
+        Assert.IsFalse(_gameController.Attack(new Point(4,15)));
+        Assert.IsFalse(_gameController.Attack(new Point(7,-5)));
     }
     
     [Test]
@@ -184,8 +185,8 @@ public class Tests
         var ships = new List<IShip>()
         {
             new Ship( EShip.Battleship ),
-            new Ship(EShip.Destroyer),
-            new Ship(EShip.Submarine),
+            new Ship(EShip.GorlockTheDestroyer),
+            new Ship(EShip.OceanGate_Submarine),
             new Ship(EShip.CruiseShip)
           
         };

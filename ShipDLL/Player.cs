@@ -15,7 +15,7 @@ public class Player:IPlayer
     {
         UnplacedShips = new List<IShip>()
         {
-            new Ship(EShip.Battleship), new Ship(EShip.Destroyer), new Ship(EShip.Submarine), new Ship(EShip.CruiseShip)
+            new Ship(EShip.Battleship), new Ship(EShip.GorlockTheDestroyer), new Ship(EShip.OceanGate_Submarine), new Ship(EShip.CruiseShip)
         };
         HasWon = false; 
     }

@@ -15,8 +15,10 @@ public class Ship : IShip
     public EShip Type { get; set; }
     public bool IsAlive { get; set; }
     public Point[] Positions { get; set; }
-    
+    public EShipDirection Direction { get; set; }
     public List<ShipPart> ShipParts { get; set; }
+    public Point StartPoint { get; set; }
+    public Point EndPoint { get; set; }
 
     public int UpdateHP()
     {

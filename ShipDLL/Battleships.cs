@@ -84,6 +84,11 @@ public class Battleships :IBattleships
             ChangeActivePlayer();
     }
 
+    public void Move(IShip targetShip, Point EndPoint)
+    {
+        if(targetShip.)
+    }
+
     private void ChangeActivePlayer()
     {
         GetInactivePlayer();

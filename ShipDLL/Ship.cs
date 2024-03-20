@@ -4,6 +4,7 @@ namespace ShipDLL;
 
 public class Ship : IShip
 {
+    public IAbility Ability { get; set; }
     public int HP { get; set; }
     public EShip Type { get; set; }
     public bool IsAlive { get; set; }
@@ -15,26 +16,26 @@ public class Ship : IShip
     {
         this.Type = type;
         IsAlive = true;
-
+        
         HP = (int) type;
         ShipParts = new List<ShipPart>();
 
-        // switch (type)
-        // {
-        //     case EShip.Destroyer:
-        //         HP = 5;
-        //         break;
-        //     case EShip.Battleship:
-        //         HP = 4;
-        //         break;
-        //     case EShip.CruiseShip:
-        //         HP = 3;
-        //         break;
-        //     case EShip.Submarine:
-        //         HP = 2;
-        //         break;
-        //         
-        // }
+        switch (type)
+        {
+            case EShip.Destroyer:
+                Ability = new GorlockAbility();
+                break;
+            case EShip.Battleship:
+                Ability = new BattleshipAbility();
+                break;
+            case EShip.CruiseShip:
+                Ability = new CruiseAbility();
+                break;
+            case EShip.Submarine:
+                Ability = new SubAbility();
+                break;
+                
+        }
 
     }
     

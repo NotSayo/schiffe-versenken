@@ -1,10 +1,10 @@
 ﻿#Player1Stats {
-    grid-row: 2;
+    grid-row: 1;
     grid-column: 1;
 }
 
 #Player2Stats {
-    grid-row: 2;
+    grid-row: 1;
     grid-column: 3;
 }
 
@@ -22,21 +22,25 @@
 .Stats_Entry {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    align-content: center;
+    /*background-color: rgba(50,50,50,0.33);*/
+    text-shadow: 4px 4px 4px black;
+    
 }
 
 .Player_stats > h2 {
     grid-row: 1;
     justify-self: center;
-    /*font-family: "Lucida Bright";*/ /* TODO Set this */
     font-weight: bolder;
     font-size: 40px;    
-    color: black;
+    color: #110c78;
+    text-shadow: 2px 3px 3px whitesmoke;
 }
 
 .Stats_Entry > * {
     font-size:25px ;
     font-weight: bold;
-    color: black;
+    color: white;
 }
 
 .Stats_Entry > .Stats_Text {
@@ -76,8 +80,8 @@
 .ShipsLayout {
     grid-row: 2 / span all;
     grid-column: 1 / span all;
-    /*background-color: green;*/
-    
+    background-color: rgba(50,50,50,0.5);
+    color: white;
 }
 
 .ShipsLayout {
@@ -90,6 +94,7 @@
     grid-template-rows: 1fr 1fr;
     justify-items: center;
     justify-self: center;
+    text-shadow: 2px 2px 2px black;
 }
 
 .Placing_Ship > img {
@@ -97,19 +102,19 @@
 }
 
 .Placing_Ship > div {
-    font-size: 22px ;
+    font-size: 25px ;
     font-family: "Lucida Bright";
     justify-self: center;
 }
 
 .player1Field {
-    background-image: url("Img/blue_captain.png");
+    background-image: linear-gradient(0deg, rgba(50,50,50,0.4) 100%, rgba(50,50,50,0.4)),url("Img/blue_captain.png");
     background-size: cover;
     background-repeat: no-repeat;
 }
 
 .player2Field {
-    background-image: url("Img/red_captain.png");
+    background-image: linear-gradient(0deg, rgba(50,50,50,0.4) 100%, rgba(50,50,50,0.4)),url("Img/red_captain.png");
     background-size: cover;
     background-repeat: no-repeat;
 }
@@ -124,10 +129,10 @@
     color: yellow;
 }
 
-/*.activePlayer {*/
-/*    background: linear-gradient(0deg, rgba(97,86,67,0) 80%, rgba(255,255,0,1) 100%);*/
-/*    color: yellow;*/
-/*}*/
+.activeShip {
+    border: yellow 2px dotted;
+}
+
 
 
 

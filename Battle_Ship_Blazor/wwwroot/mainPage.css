@@ -1,18 +1,23 @@
-﻿#main_Window {
-    display: grid;
-    grid-template-rows: 5fr 90fr 5fr;
-    grid-template-columns: 1.5fr 3.2fr 1.5fr;
-    height: 100vh;
+﻿body {
+    margin: 0;
 }
 
-#main_Window > h1 {
-    grid-row: 1;
-    grid-column: 1 / span 3;
-    justify-self: center;
+#main_Window {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 11fr 1fr;
+    grid-template-columns: 1.5fr 3.2fr 1.5fr;
 }
+
+/*#main_Window > h1 {*/
+/*    grid-row: 1;*/
+/*    grid-column: 1 / span 3;*/
+/*    justify-self: center;*/
+/*}*/
 
 #MainBoard {
-    grid-row: 2;
+    grid-row: 1;
     grid-column: 2;
     background: purple;
     height: auto;
@@ -45,7 +50,7 @@
 
 #controls {
     grid-column: 1 / span 3;
-    grid-row: 3;
+    grid-row: 2;
     background: orange;
     width: 100%;
     height: 100%;
@@ -60,15 +65,6 @@
     background-color: cyan;
 }
 
-/*.Submarine1 {*/
-/*    clip-path: inset(0 50% 0 0);*/
-/*}*/
-
-/*.Submarine2 {*/
-/*    clip-path: inset(0 0 0 50% );*/
-/*}*/
-
-
 #controls {
     display: grid;
     grid-template-rows: 100%;
@@ -81,9 +77,6 @@
 
 .backgroundMiss {
     background-color: rgba(255,255,0, 0.7);
-}
-
-.backgroundEmpty {
 }
 
 #ModalContainer {

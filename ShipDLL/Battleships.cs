@@ -8,9 +8,12 @@ public class Battleships :IBattleships
     public EPhase GamePhase { get; set; }
     public EResult Result { get; set; }
     
+    public ModalData Modal { get; set; }
+    
 
     public Battleships()
     {
+        Modal = new ModalData();
         GeneratePlayers();
         CreateGame();
     }

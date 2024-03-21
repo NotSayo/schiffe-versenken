@@ -19,6 +19,8 @@ public interface IBattleships
     public void EndGame();
     public bool CheckGameOver();
     public void GameOver(IPlayer player);
+    
+    public ModalData Modal { get; set; }
 
     public void Surrender();
 

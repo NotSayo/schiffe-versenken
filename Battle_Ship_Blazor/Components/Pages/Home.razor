@@ -9,8 +9,16 @@
 
 <PageTitle>Home</PageTitle>
 
-<div id="ModalContainer" class="@(game.GamePhase == EPhase.GameOver ? "visible" : "notVisible")">
-    <div id="ModalBackground"></div>
+<div id="ModalContainer" class="@(game.Modal.isVisible ? "visible" : "notVisible")">
+    <div id="ModalMessageBox">
+        <h2 class="ModalTitle">@game.Modal.Title</h2>
+        <div class="ModalLead">@game.Modal.Lead</div>
+        <div class="ModalDescription">@game.Modal.Description</div>
+        <div class="ModalExtraInformations">@game.Modal.ExtraInformations</div>
+        <div class="ModalButtons">
+            <button class="ModalConfirm">Confirm</button>
+        </div>
+    </div>
 </div>
 
 <div class="" id="main_Window">

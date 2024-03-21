@@ -20,6 +20,7 @@ public class Player:IPlayer
         {
             new Ship(EShip.Battleship), new Ship(EShip.GorlockTheDestroyer), new Ship(EShip.OceanGate_Submarine), new Ship(EShip.CruiseShip)
         };
+        UnplacedShips = UnplacedShips.OrderByDescending(s => (int)s.Type).ToList();
         HasWon = false; 
     }
 

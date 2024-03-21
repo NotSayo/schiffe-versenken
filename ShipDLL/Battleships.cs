@@ -11,13 +11,8 @@ public class Battleships :IBattleships
 
     public Battleships()
     {
-        Players = new List<IPlayer>();
-        Players.Add(new Player() {ID = 1});
-        Players.Add(new Player() {ID = 2});
-        GamePhase = EPhase.NotStarted;
-        Result = EResult.Draw;
-        
-        ActivePlayer = Players[0];
+        GeneratePlayers();
+        CreateGame();
     }
 
     public bool StartPlacingShips()
@@ -27,11 +22,20 @@ public class Battleships :IBattleships
         return true;
     }
 
-    public void CreateGame()
+    private void GeneratePlayers()
     {
+        Players = new List<IPlayer>();
+        Players.Add(new Player() {ID = 1});
+        Players.Add(new Player() {ID = 2});
         Players[0].CreateField();
         Players[1].CreateField();
-        
+    }
+    
+    public void CreateGame()
+    {
+        GamePhase = EPhase.NotStarted;
+        Result = EResult.Draw;
+        ActivePlayer = Players[0];
     }
     
 
@@ -97,16 +101,35 @@ public class Battleships :IBattleships
             ShowMyField(Players[1]);
             ChangeTurns();
             ShowMyField(Players[0]);
-           
-
         }
     }
 
     public void EndGame()
     {
-        if (this.GamePhase == EPhase.GameOver) 
-            this.GamePhase = EPhase.NotStarted;
-        
+        GamePhase = EPhase.NotStarted;
+        GeneratePlayers();
+        CreateGame();
+    }
+
+    public bool CheckGameOver()
+    {
+        foreach (var player in Players)
+        {
+            if (player.Field.LeftHP == 0)
+            {
+                GameOver(Players.Where(p => p != player).First());
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void GameOver(IPlayer player)
+    {
+        GamePhase = EPhase.GameOver;
+        Console.WriteLine("Game Over!\n" + player.ID + " has won!");
+        EndGame();
     }
 
     public void Surrender()
@@ -127,6 +150,7 @@ public class Battleships :IBattleships
     }
     public bool Attack(Point point)
     {
+        if (GamePhase != EPhase.Playing) return false;
         if(GetInactivePlayer().Field.FieldArr[point.GetIndex()].Status != EPositionStatus.Empty && GetInactivePlayer().Field.FieldArr[point.GetIndex()].Status != EPositionStatus.Ship)
             return false;
         if (GetInactivePlayer().Field.FieldArr[point.GetIndex()].ShipPart == null)
@@ -134,6 +158,7 @@ public class Battleships :IBattleships
             GetInactivePlayer().Field.FieldArr[point.GetIndex()].Status = EPositionStatus.Miss;
             ActivePlayer.EnemyField.FieldArr[point.GetIndex()] = GetInactivePlayer().Field.FieldArr[point.GetIndex()];
             ChangeTurns();
+            CheckGameOver();
             return false;
         }
         else
@@ -142,9 +167,11 @@ public class Battleships :IBattleships
             GetInactivePlayer().Field.FieldArr[point.GetIndex()].ShipPart.OnHit();
             ActivePlayer.EnemyField.FieldArr[point.GetIndex()] = GetInactivePlayer().Field.FieldArr[point.GetIndex()];
             ChangeTurns();
+            CheckGameOver();
             return true;
         }
         
+
     }
     
     public bool ShowMyField(IPlayer player)

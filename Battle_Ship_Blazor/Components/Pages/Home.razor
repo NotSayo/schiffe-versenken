@@ -10,12 +10,12 @@
 <PageTitle>Home</PageTitle>
 
 <div id="ModalContainer" class="@(game.GamePhase == EPhase.GameOver ? "visible" : "notVisible")">
-    <div id="ModalBackground" >d</div>
+    <div id="ModalBackground"></div>
 </div>
 
 <div class="" id="main_Window">
     @* <h1>Battle Ships</h1> *@
-    <div id="Player1Stats" class="Player_stats player1Field @(game.ActivePlayer == game.Players[0] ? "activePlayer1" : "")">   <!-- TODO Active class for active player -->
+    <div id="Player1Stats" class="Player_stats player1Field @(game.ActivePlayer == game.Players[0] ? "activePlayer1" : "")">  
         <h2>Player 1</h2>
         @if(game.GamePhase == EPhase.PlacingShips && game.ActivePlayer == game.Players[0])
         {
@@ -33,27 +33,27 @@
         {
             <div class="Stats_Entry">
                 <div class="Stats_Text">Left HP:</div>
-                <div class="Stats_Stat"> @game.Players[0].Field.LeftHP</div> <!-- TODO Backend -->
+                <div class="Stats_Stat"> @game.Players[0].Field.LeftHP</div> 
             </div>
             <div class="Stats_Entry">
-                <div class="Stats_Text">Left Ships:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat"> @game.Players[0].Field.LeftShips</div> <!-- TODO Backend -->
+                <div class="Stats_Text">Left Ships:</div> 
+                <div class="Stats_Stat"> @game.Players[0].Field.LeftShips</div> 
             </div>
             <div class="Stats_Entry">
-                <div class="Stats_Text">Attacks:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat">@GetAttacks(game.Players[0])</div> <!-- TODO Backend -->
+                <div class="Stats_Text">Attacks:</div>
+                <div class="Stats_Stat">@GetAttacks(game.Players[0])</div> 
             </div>
             <div class="Stats_Entry">
-                <div class="Stats_Text">Misses:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat">@GetMisses(game.Players[0]) </div> <!-- TODO Backend -->
+                <div class="Stats_Text">Misses:</div> 
+                <div class="Stats_Stat">@GetMisses(game.Players[0]) </div> 
             </div>
             <div class="Stats_Entry">
-                <div class="Stats_Text">Hits:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat">@GetHits(game.Players[0])</div> <!-- TODO Backend -->
+                <div class="Stats_Text">Hits:</div> 
+                <div class="Stats_Stat">@GetHits(game.Players[0])</div> 
             </div>
             <div class="Stats_Entry">
-                <div class="Stats_Text">Hit-Percent:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat">@GetHitPercent(game.Players[0])%</div> <!-- TODO Backend -->
+                <div class="Stats_Text">Hit-Percent:</div> 
+                <div class="Stats_Stat">@GetHitPercent(game.Players[0])%</div> 
             </div>
             <div class="Stats_Entry">
                 <div class="Stats_Text">Show Field</div>
@@ -101,27 +101,27 @@
         {
             <div class="Stats_Entry">
                 <div class="Stats_Text">Left HP:</div>
-                <div class="Stats_Stat"> @game.Players[1].Field.LeftHP</div> <!-- TODO Backend -->
+                <div class="Stats_Stat"> @game.Players[1].Field.LeftHP</div> 
             </div>
             <div class="Stats_Entry">
-                <div class="Stats_Text">Left Ships:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat"> @game.Players[1].Field.LeftShips</div> <!-- TODO Backend -->
+                <div class="Stats_Text">Left Ships:</div> 
+                <div class="Stats_Stat"> @game.Players[1].Field.LeftShips</div> 
             </div>
             <div class="Stats_Entry">
-                <div class="Stats_Text">Attacks:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat">@GetAttacks(game.Players[1])</div> <!-- TODO Backend -->
+                <div class="Stats_Text">Attacks:</div> 
+                <div class="Stats_Stat">@GetAttacks(game.Players[1])</div> 
             </div>
             <div class="Stats_Entry">
-                <div class="Stats_Text">Misses:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat">@GetMisses(game.Players[1]) </div> <!-- TODO Backend -->
+                <div class="Stats_Text">Misses:</div>
+                <div class="Stats_Stat">@GetMisses(game.Players[1]) </div> 
             </div>
             <div class="Stats_Entry">
-                <div class="Stats_Text">Hits:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat">@GetHits(game.Players[1])</div> <!-- TODO Backend -->
+                <div class="Stats_Text">Hits:</div> 
+                <div class="Stats_Stat">@GetHits(game.Players[1])</div> 
             </div>
             <div class="Stats_Entry">
-                <div class="Stats_Text">Hit-Percent:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat">@GetHitPercent(game.Players[1])%</div> <!-- TODO Backend -->
+                <div class="Stats_Text">Hit-Percent:</div> 
+                <div class="Stats_Stat">@GetHitPercent(game.Players[1])%</div> 
             </div>
             <div class="Stats_Entry">
                 <div class="Stats_Text">Show Field</div>

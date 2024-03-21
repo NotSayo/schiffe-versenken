@@ -19,12 +19,35 @@
 #MainBoard {
     grid-row: 1;
     grid-column: 2;
-    background: purple;
+    position: relative;
     height: auto;
     width: 100%;
     display: grid;
     grid-template-rows: 1fr 1fr;
+    /*background-image: linear-gradient(0deg, rgba(50,50,50,0.44) 100%, rgba(50,50,50,0.8)), url("Img/main_image.png") ;*/
+    /*background-size: cover;*/
+    /*background-repeat: no-repeat ;*/
+    /*background-position-x: left ;*/
+    /*background-position-y: top;*/
+    /*backdrop-filter: blur(5px);*/
+    border-left: black solid 1px;
+    border-right: black solid 1px;
 }
+
+#MainBoard::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 102%;
+    height: 102%;
+    background: url("Img/main_image.png");
+    background-size: cover;
+    filter: blur(4px);
+    margin: -0.8%;
+    z-index: -1;
+}
+
 
 
 .FieldEntry {
@@ -35,9 +58,12 @@
     display: grid;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    background-image: url("Img/water.jpeg");
+    /*background-image: url("Img/water.jpeg");*/
+    background-color: yellowgreen;
     background-size: cover;
     background-repeat: no-repeat;
+    border: 2px black solid;
+    
 }
 
 .FieldPoint {

@@ -17,6 +17,8 @@ public interface IBattleships
     public void StartGame();
     public bool Attack(Point point);
     public void EndGame();
+    public bool CheckGameOver();
+    public void GameOver(IPlayer player);
 
     public void Surrender();
 

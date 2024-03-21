@@ -80,7 +80,7 @@
 .ShipsLayout {
     grid-row: 2 / span all;
     grid-column: 1 / span all;
-    background-color: rgba(50,50,50,0.5);
+    background-color: rgba(50,50,50,0.75);
     color: white;
 }
 
@@ -111,6 +111,7 @@
     background-image: linear-gradient(0deg, rgba(50,50,50,0.4) 100%, rgba(50,50,50,0.4)),url("Img/blue_captain.png");
     background-size: cover;
     background-repeat: no-repeat;
+    background-position-x: left;
 }
 
 .player2Field {
@@ -120,12 +121,13 @@
 }
 
 .activePlayer1 {
-    background-image: linear-gradient(0deg, rgba(97,86,67,0) 80%, rgba(255,255,0,1)), url("Img/blue_captain.png");
+    background-image: linear-gradient(0deg, rgba(97,86,67,0.33) 90%, rgba(255,255,0,0.75)), url("Img/blue_captain.png");
     color: yellow;
+    
 }
 
 .activePlayer2 {
-    background-image: linear-gradient(0deg, rgba(97,86,67,0) 80%, rgba(255,255,0,1)), url("Img/red_captain.png");
+    background-image: linear-gradient(0deg, rgba(97,86,67,0.33) 90%, rgba(255,255,0,0.75)), url("Img/red_captain.png");
     color: yellow;
 }
 

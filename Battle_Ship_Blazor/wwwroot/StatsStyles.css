@@ -102,9 +102,34 @@
     justify-self: center;
 }
 
-.activeShip {
-    border: yellow 2px dotted;
+.player1Field {
+    background-image: url("Img/blue_captain.png");
+    background-size: cover;
+    background-repeat: no-repeat;
 }
+
+.player2Field {
+    background-image: url("Img/red_captain.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.activePlayer1 {
+    background-image: linear-gradient(0deg, rgba(97,86,67,0) 80%, rgba(255,255,0,1)), url("Img/blue_captain.png");
+    color: yellow;
+}
+
+.activePlayer2 {
+    background-image: linear-gradient(0deg, rgba(97,86,67,0) 80%, rgba(255,255,0,1)), url("Img/red_captain.png");
+    color: yellow;
+}
+
+/*.activePlayer {*/
+/*    background: linear-gradient(0deg, rgba(97,86,67,0) 80%, rgba(255,255,0,1) 100%);*/
+/*    color: yellow;*/
+/*}*/
+
+
 
 
 

@@ -2,7 +2,7 @@
     display: grid;
     grid-template-rows: 5fr 90fr 5fr;
     grid-template-columns: 1.5fr 3.2fr 1.5fr;
-    height: 99vh;
+    height: 100vh;
 }
 
 #main_Window > h1 {
@@ -30,11 +30,13 @@
     display: grid;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    background-image: url("Img/water.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .FieldPoint {
     border: 1px solid black;
-    background: yellowgreen;
     height: 100%;
     width: 100%;
     justify-self: center;
@@ -74,15 +76,14 @@
 }
 
 .backgroundHit  {
-    background-color: darkred;
+    background-color: rgba(255,0,0, 0.7);
 }
 
 .backgroundMiss {
-    background-color: yellow;
+    background-color: rgba(255,255,0, 0.7);
 }
 
 .backgroundEmpty {
-    background-color: yellowgreen;
 }
 
 #ModalContainer {

@@ -2,11 +2,12 @@
 
 public class Battleships :IBattleships
 {
-    public int Round { get; }
+    public int Round { get; set; }
     public List<IPlayer> Players { get; set; }
     public IPlayer ActivePlayer { get; private set; }
     public EPhase GamePhase { get; set; }
     public EResult Result { get; set; }
+    
 
     public Battleships()
     {
@@ -79,6 +80,8 @@ public class Battleships :IBattleships
     public void ChangeTurns()
     {
         ChangeActivePlayer();
+        if (ActivePlayer == Players[0])
+            Round++;
     }
 
     private void ChangeActivePlayer()
@@ -90,8 +93,12 @@ public class Battleships :IBattleships
     {
         if (this.GamePhase == EPhase.PlacingShips && Players[0].Field.Ships.Count == 4 && Players[1].Field.Ships.Count == 4 && Players[0].UnplacedShips.Count == 0 && Players[1].UnplacedShips.Count == 0)
         {
-            ChangeTurns();
             this.GamePhase = EPhase.Playing;
+            ShowMyField(Players[1]);
+            ChangeTurns();
+            ShowMyField(Players[0]);
+           
+
         }
     }
 
@@ -139,13 +146,20 @@ public class Battleships :IBattleships
         }
         
     }
+    
+    public bool ShowMyField(IPlayer player)
+    {
+        if(GamePhase != EPhase.Playing) return false;
+        if(player != ActivePlayer) return false;
+        
+        player.ShowMyField = !player.ShowMyField;
+        return player.ShowMyField;
+    }
 
     public void Draw()
     {
-        if(this.GamePhase == EPhase.Playing && Players.Where(p => p.AcceptDraw).Count() == 2)
-        {  
-            this.Result = EResult.Draw;
-            this.GamePhase = EPhase.NotStarted;
-        }
+        this.Result = EResult.Draw;
+        this.GamePhase = EPhase.GameOver;
+        Console.WriteLine("Game has been drawn");
     }
 }

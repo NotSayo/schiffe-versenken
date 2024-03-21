@@ -10,7 +10,7 @@
 
 .Player_stats {
     display: grid;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     width: 100%;
     height: 100%;
     padding: 5%;
@@ -27,17 +27,24 @@
 .Player_stats > h2 {
     grid-row: 1;
     justify-self: center;
-    /*font-family: "Lucida Bright";*/ // TODO Set this
-    font-weight: bold;
+    /*font-family: "Lucida Bright";*/ /* TODO Set this */
+    font-weight: bolder;
+    font-size: 40px;    
+    color: black;
 }
 
 .Stats_Entry > * {
     font-size:25px ;
+    font-weight: bold;
+    color: black;
 }
 
 .Stats_Entry > .Stats_Text {
-    justify-self: center;
+    justify-self: right;
     padding-left: 20%;
+    text-align: right;
+    width: 100%;
+    height: 100%;
 }
 
 .Stats_Entry > .Stats_Stat {

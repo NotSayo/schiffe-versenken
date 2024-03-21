@@ -2,10 +2,12 @@
 
 public interface IBattleships
 {
-    public int Round { get; }
+    public int Round { get; set; }
     public List<IPlayer> Players { get; set; }
     public IPlayer ActivePlayer { get; }
     public EPhase GamePhase { get; set; }
+    
+    public bool ShowMyField(IPlayer player);
     
     public void CreateGame();
     public bool GameOver(); 

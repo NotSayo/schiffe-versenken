@@ -11,6 +11,9 @@ public class Player:IPlayer
     public bool HasWon { get; set; }
     public bool AcceptDraw { get; set; }
 
+
+    public bool ShowMyField { get; set; } = true;
+
     public Player()
     {
         UnplacedShips = new List<IShip>()

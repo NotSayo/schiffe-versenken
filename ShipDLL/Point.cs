@@ -1,10 +1,5 @@
 ﻿namespace ShipDLL;
 
-
-//TODO Add SetHasShip method
-
-
-
 public class Point
 {
     public EPositionStatus Status { get; set; }

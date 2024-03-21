@@ -9,6 +9,10 @@
 
 <PageTitle>Home</PageTitle>
 
+<div id="ModalContainer" class="@(game.GamePhase == EPhase.GameOver ? "visible" : "notVisible")">
+    <div id="ModalBackground" >d</div>
+</div>
+
 <div class="container-fluid" id="main_Window">
     <h1>Battle Ships</h1>
     <div id="Player1Stats" class="Player_stats">   <!-- TODO Active class for active player -->
@@ -37,18 +41,42 @@
             </div>
             <div class="Stats_Entry">
                 <div class="Stats_Text">Attacks:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat">xx</div> <!-- TODO Backend -->
+                <div class="Stats_Stat">@GetAttacks(game.Players[0])</div> <!-- TODO Backend -->
             </div>
             <div class="Stats_Entry">
                 <div class="Stats_Text">Misses:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+                <div class="Stats_Stat">@GetMisses(game.Players[0]) </div> <!-- TODO Backend -->
             </div>
             <div class="Stats_Entry">
                 <div class="Stats_Text">Hits:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+                <div class="Stats_Stat">@GetHits(game.Players[0])</div> <!-- TODO Backend -->
             </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Hit-Percent:</div> <!-- TODO Backend -->
+                <div class="Stats_Stat">@GetHitPercent(game.Players[0])%</div> <!-- TODO Backend -->
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Show Field</div>
+                <label class="switch Stats_Stat">
+                    <input @bind="ShowMyFieldPlayer1" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+            </div> 
             <div class="Stats_Buttons">
-                 <button class="Stats_draw">Request a Draw</button> <!-- TODO Backend -->
+                <button class="Stats_draw" @onclick="() => RequestDraw(game.Players[0])">
+                    @if (DrawRequestedBy == null)
+                    {
+                        <span>Request Draw</span>
+                    }
+                    else if (DrawRequestedBy == game.Players[0])
+                    {
+                        <span>Draw Requested!</span>
+                    }
+                    else if(DrawRequestedBy == game.Players[1])
+                    {
+                        <span>Accept Draw</span>
+                    }
+                </button> <!-- TODO Backend -->
                 <button class="Stats_surrender">Surrender</button>
             </div>
         }
@@ -80,114 +108,152 @@
             </div>
             <div class="Stats_Entry">
                 <div class="Stats_Text">Attacks:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat">xx </div> <!-- TODO Backend -->
+                <div class="Stats_Stat">@GetAttacks(game.Players[1])</div> <!-- TODO Backend -->
             </div>
             <div class="Stats_Entry">
                 <div class="Stats_Text">Misses:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+                <div class="Stats_Stat">@GetMisses(game.Players[1]) </div> <!-- TODO Backend -->
             </div>
             <div class="Stats_Entry">
                 <div class="Stats_Text">Hits:</div> <!-- TODO Backend -->
-                <div class="Stats_Stat"> xx</div> <!-- TODO Backend -->
+                <div class="Stats_Stat">@GetHits(game.Players[1])</div> <!-- TODO Backend -->
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Hit-Percent:</div> <!-- TODO Backend -->
+                <div class="Stats_Stat">@GetHitPercent(game.Players[1])%</div> <!-- TODO Backend -->
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Show Field</div>
+                <label class="switch Stats_Stat">
+                    <input @bind="ShowMyFieldPlayer2" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
             </div>
             <div class="Stats_Buttons">
-                <button class="Stats_draw">Request a Draw</button> <!-- TODO Backend -->
+               <button class="Stats_draw" @onclick="() => RequestDraw(game.Players[1])">
+                   @if (DrawRequestedBy == null)
+                   {
+                       <span>Request Draw</span>
+                   }
+                   else if (DrawRequestedBy == game.Players[1])
+                   {
+                       <span>Draw Requested!</span>
+                   }
+                   else if(DrawRequestedBy == game.Players[0])
+                   {
+                       <span>Accept Draw</span>
+                   }
+                               </button> <!-- TODO Backend -->
                 <button class="Stats_surrender">Surrender</button>
             </div>
         }
     </div>
     
-    <div id="MainBoard">
-        <div class="FieldEntry">
-             @if (game.ActivePlayer == game.Players[1])
-             {
-                 @for (int i = 0; i < 100; i++)
+     <div id="MainBoard">
+            <div class="FieldEntry">
+                 @if (game.ActivePlayer == game.Players[1] && ShowMyFieldPlayer2)
                  {
-                     var tempint2 = i;
-                     <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[1].Field.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 2)">
-                     
-                         @if (game.Players[1].Field.FieldArr[tempint2].ShipPart != null)
-                         {
-                             var j = game.Players[1].Field.FieldArr[tempint2].ShipPart.NumberInSequence;
-                             <img class="PlacedShip Placed @((game.Players[1].Field.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[1].Field.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
-                         }
-                     </div></a>
-                 }
-             }
-             else
-             {
-                 @for (int i = 0; i < 100; i++)
-                 {
-                     var tempint2 = i;
-                     <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[0].EnemyField.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 2)">
-                         @if (game.Players[0].EnemyField.FieldArr[tempint2].ShipPart != null)
-                         {
-                             var j = game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.NumberInSequence;
-                             <img class="PlacedShip Placed @((game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
-                         }
-                     </div></a>
-                 }
-             }
-             
-        </div>
-         <div class="FieldEntry">
-             @if (game.ActivePlayer == game.Players[0])
-             {
-                 @for (int i = 0; i < 100; i++)
-                 {
-                     var tempint2 = i;
-                     <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[0].Field.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 1)">
-                     
-                         @if (game.Players[0].Field.FieldArr[tempint2].ShipPart != null)
-                         {
-                             var j = game.Players[0].Field.FieldArr[tempint2].ShipPart.NumberInSequence;
-                             <img class="PlacedShip Placed @((game.Players[0].Field.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[0].Field.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
-                         }
-                     </div></a>
-                 }
-             }
-             else
-             {
-                 @for (int i = 0; i < 100; i++)
-                 {
-                     var tempint2 = i;
-                     <a>
-                         <div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[1].EnemyField.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 1)">
-
-                             @if (game.Players[1].EnemyField.FieldArr[tempint2].ShipPart != null)
+                     @for (int i = 0; i < 100; i++)
+                     {
+                         var tempint2 = i;
+                         <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[1].Field.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 2)">
+                         
+                             @if (game.Players[1].Field.FieldArr[tempint2].ShipPart != null)
                              {
-                                 var j = game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.NumberInSequence;
-                                 <img class="PlacedShip Placed @((game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
+                                 var j = game.Players[1].Field.FieldArr[tempint2].ShipPart.NumberInSequence;
+                                 <img class="PlacedShip Placed @((game.Players[1].Field.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[1].Field.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
                              }
-                        </div></a>
+                         </div></a>
+                     }
                  }
-             }
-        </div>
-    </div>  
+                 else
+                 {
+                     @for (int i = 0; i < 100; i++)
+                     {
+                         var tempint2 = i;
+                         <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[0].EnemyField.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 2)">
+                             @if (game.Players[0].EnemyField.FieldArr[tempint2].ShipPart != null)
+                             {
+                                 var j = game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.NumberInSequence;
+                                 <img class="PlacedShip Placed @((game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
+                             }
+                         </div></a>
+                     }
+                 }
+                 
+            </div>
+             <div class="FieldEntry">
+                 @if (game.ActivePlayer == game.Players[0] && ShowMyFieldPlayer1)
+                 {
+                     @for (int i = 0; i < 100; i++)
+                     {
+                         var tempint2 = i;
+                         <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[0].Field.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 1)">
+                         
+                             @if (game.Players[0].Field.FieldArr[tempint2].ShipPart != null)
+                             {
+                                 var j = game.Players[0].Field.FieldArr[tempint2].ShipPart.NumberInSequence;
+                                 <img class="PlacedShip Placed @((game.Players[0].Field.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[0].Field.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
+                             }
+                         </div></a>
+                     }
+                 }
+                 else
+                 {
+                     @for (int i = 0; i < 100; i++)
+                     {
+                         var tempint2 = i;
+                         <a>
+                             <div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[1].EnemyField.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 1)">
     
-    <div id="controls">
-        <div>Round: @game.Round</div>
-        <div>Active Player: @game.ActivePlayer.ID</div>
-        <div class="controls_buttons">
-            <button class="Stats_draw" @onclick="StartGame">Start Placing</button>
-            <button @onclick="game.ChangeTurns">Change Turn</button>
+                                 @if (game.Players[1].EnemyField.FieldArr[tempint2].ShipPart != null)
+                                 {
+                                     var j = game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.NumberInSequence;
+                                     <img class="PlacedShip Placed @((game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
+                                 }
+                            </div></a>
+                     }
+                 }
+            </div>
+        </div>  
+        
+        <div id="controls">
+            <div>Round: @game.Round</div>
+            <div>Active Player: @game.ActivePlayer.ID</div>
+            <div class="controls_buttons">
+                <button class="Stats_draw" @onclick="StartGame">Start Placing</button>
+                <button @onclick="game.ChangeTurns">Change Turn</button>
+            </div>
         </div>
+        
     </div>
-    
-</div>
+
+
 
 
 @code {
     private Battleships game { get; set; } = new Battleships();
     public List<Point> SelectedPoints { get; set; }
     public IShip ActiveShip { get; set; }
+    public IPlayer DrawRequestedBy { get; set; }
+
+    public bool ShowMyFieldPlayer1
+    {
+        get => game.Players[0].ShowMyField;
+        set => value = game.ShowMyField(game.Players[0]);
+    }
+    public bool ShowMyFieldPlayer2
+    {
+        get => game.Players[1].ShowMyField;
+        set => value = game.ShowMyField(game.Players[1]);
+    }
     
     protected override void OnInitialized()
     {
         game = new Battleships();
         game.CreateGame();
         SelectedPoints = new List<Point>();
-
+        DrawRequestedBy = null;
 
         return;
     }
@@ -238,10 +304,6 @@
             var result = game.Attack(new Point(field % 10, (int)field / 10));
             Console.WriteLine(result);
         }
-        
-
-        
-        
     }
     
 
@@ -273,6 +335,38 @@
         if (SelectedPoints[0].GetIndex() == field)
             return "clickedField";
         return "";
+    }
+
+    private int GetAttacks(IPlayer player) => player.EnemyField.FieldArr.ToList().Where(p => p.Status != EPositionStatus.Empty && p.Status != EPositionStatus.Ship).Count();
+
+    private int GetMisses(IPlayer player) => player.EnemyField.FieldArr.ToList().Where(p => p.Status == EPositionStatus.Miss).Count();
+
+    private int GetHits(IPlayer player) => player.EnemyField.FieldArr.ToList().Where(p => p.Status == EPositionStatus.Hit).Count();
+
+    private double GetHitPercent(IPlayer player)
+    {
+        if (GetAttacks(player) == 0)
+            return 0;
+        return Math.Round((double)GetHits(player) / GetAttacks(player) * 100, 2);
+
+    }
+
+    private void RequestDraw(IPlayer player)
+    {
+        if (DrawRequestedBy == null)
+        {
+            DrawRequestedBy = player;
+            return;
+        }
+        if (DrawRequestedBy == player)
+            return;
+        game.Draw();
+        DrawRequestedBy = null;
+    }
+    
+    public void Draw()
+    {
+        
     }
     
 }

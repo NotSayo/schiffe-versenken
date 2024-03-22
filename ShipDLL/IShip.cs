@@ -9,6 +9,7 @@ public interface IShip
     public Point[] Positions { get; set; }
     public Point StartPoint { get; set; }
     public Point EndPoint { get; set; }
+    public IAbility Ability { get; set; }
     public int UpdateHP();
     
     public List<ShipPart> ShipParts { get; set; }

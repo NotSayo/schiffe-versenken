@@ -105,10 +105,14 @@ public class Battleships :IBattleships
         ChangeActivePlayer();
     }
 
-    public void Move(IShip targetShip, Point EndPoint)
+    public void Move(IShip targetShip, Point endPoint)
     {
-        if(targetShip.HP == 0) return;
-        if(targetShip.Direction ==)
+        if(targetShip.HP == 0)
+            return;
+        if(targetShip.Positions.Contains(endPoint))
+            return;
+        if()
+        
     }
     private void MoveLeft(IShip targetShip)
     {
@@ -135,6 +139,8 @@ public class Battleships :IBattleships
 
         if (targetShip.Direction == EShipDirection.VerticalUp && targetShip.StartPoint.X != 8 )
         {
+            targetShip.StartPoint =
+            
             targetShip.StartPoint.X++;
             targetShip.EndPoint.X++;
         }
@@ -221,4 +227,5 @@ public class Battleships :IBattleships
             this.GamePhase = EPhase.NotStarted;
         }
     }
+    //TODO Lootboxes
 }

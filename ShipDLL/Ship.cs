@@ -20,6 +20,8 @@ public class Ship : IShip
     public Point StartPoint { get; set; }
     public Point EndPoint { get; set; }
     public IAbility Ability { get; set; }
+    public Point MiddlePoint { get; set; }
+    public int turningThreshhold { get; set; }
 
     public int UpdateHP()
     {
@@ -36,6 +38,8 @@ public class Ship : IShip
         SetPositions();
         SetAbility();
         ShipParts = new List<ShipPart>();
+        this.turningThreshhold = (int)Math.Abs((double)Type / 2);
+        this.MiddlePoint = new Point((int)Math.Floor((double)(-StartPoint.X + EndPoint.X) / 2), (int)Math.Floor((double)(-StartPoint.Y + EndPoint.Y) / 2));
 
         // switch (type)
         // {
@@ -56,7 +60,7 @@ public class Ship : IShip
 
     }
 
-    private void SetPositions()
+    public void SetPositions()
     {
         if (this.Type == EShip.OceanGate_Submarine)
         {

@@ -17,7 +17,8 @@ public class GorlockAbility : IAbility
     {
         if (_rechargeTime == RechargeState)
         {
-            if(this.)
+            //if(this.)
+            throw new NotImplementedException();
         }
     }
 }

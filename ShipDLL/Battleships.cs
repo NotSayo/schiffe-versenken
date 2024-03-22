@@ -107,18 +107,66 @@ public class Battleships :IBattleships
 
     public void Move(IShip targetShip, Point endPoint)
     {
-        if(targetShip.HP == 0)
+        var ArrOfAlreadyHitPoints = ActivePlayer.Field.FieldArr.Where(s => s.Equals(endPoint)).Where(s => s.Status != EPositionStatus.Hit).ToArray();
+        
+        if(targetShip.Positions.Contains(endPoint) && !ArrOfAlreadyHitPoints.Contains(endPoint) && targetShip.HP == 0)
             return;
-        if(targetShip.Positions.Contains(endPoint))
+        if(endPoint.X == targetShip.StartPoint.X - 1 && endPoint.Y == targetShip.StartPoint.Y)
+        {
+            MoveLeft(targetShip);
             return;
-        if()
+        }
+        if(endPoint.X == targetShip.StartPoint.X + 1 && endPoint.Y == targetShip.StartPoint.Y)
+        {
+            MoveRight(targetShip);
+            return;
+        }
+        if(endPoint.Y == targetShip.StartPoint.Y - 1 && endPoint.X == targetShip.StartPoint.X)
+        {
+            MoveUp(targetShip);
+            return;
+        }
+
+        if (endPoint.Y == targetShip.StartPoint.Y + 1 && endPoint.X == targetShip.StartPoint.X)
+        {
+            MoveDown(targetShip);
+            return;
+        }
+       
         
     }
     private void MoveLeft(IShip targetShip)
     {
         if(targetShip.StartPoint.X == 0) return;
-        targetShip.StartPoint.X--;
-        targetShip.EndPoint.X--;
+        
+        if(targetShip.Direction == EShipDirection.HorizontalLeft)
+        {
+            targetShip.StartPoint.X++;
+            targetShip.EndPoint.X++;
+        }
+
+        if (targetShip.Direction == EShipDirection.HorizontalRight)
+        {
+            targetShip.StartPoint.X--;
+            targetShip.EndPoint.X--;
+        }
+        
+        if(targetShip.StartPoint.X != 1 )
+        {
+            if (targetShip.Direction == EShipDirection.VerticalDown)
+            {
+                TurnRight(targetShip);
+            }
+
+            if (targetShip.Direction == EShipDirection.VerticalUp)
+            {
+                TurnLeft(targetShip);
+            }
+        }
+        else
+        {
+            throw new WrongMovementError();
+        }
     }
     private void MoveRight(IShip targetShip)
     {
@@ -132,17 +180,17 @@ public class Battleships :IBattleships
 
         if (targetShip.Direction == EShipDirection.HorizontalLeft)
         {
-            var tmp = targetShip.StartPoint.X;
-            targetShip.StartPoint.X = targetShip.EndPoint.X;
-            targetShip.EndPoint.X = tmp;
+            targetShip.StartPoint.X--;
+            targetShip.EndPoint.X--;
         }
 
         if (targetShip.Direction == EShipDirection.VerticalUp && targetShip.StartPoint.X != 8 )
         {
-            targetShip.StartPoint =
-            
-            targetShip.StartPoint.X++;
-            targetShip.EndPoint.X++;
+            TurnRight(targetShip);
+        }
+        if (targetShip.Direction == EShipDirection.VerticalDown && targetShip.StartPoint.X != 8 )
+        {
+            TurnLeft(targetShip);
         }
         
             
@@ -150,16 +198,86 @@ public class Battleships :IBattleships
     }
     private void MoveUp(IShip targetShip)
     {
-        if(targetShip.StartPoint.Y == 0) return;
-        targetShip.StartPoint.Y++;
-        targetShip.EndPoint.Y++;
+        if(targetShip.EndPoint.Y == 0) return;
+        
+        if(targetShip.Direction == EShipDirection.VerticalUp)
+        {
+            targetShip.StartPoint.Y++;
+            targetShip.EndPoint.Y++;
+        }
+
+        if (targetShip.Direction == EShipDirection.VerticalDown)
+        {
+            targetShip.StartPoint.Y--;
+            targetShip.EndPoint.Y--;
+        }
+
+        if(targetShip.StartPoint.X != 1 )
+        {
+            if (targetShip.Direction == EShipDirection.HorizontalRight)
+            {
+                TurnRight(targetShip);
+            }
+
+            if (targetShip.Direction == EShipDirection.HorizontalLeft)
+            {
+                TurnLeft(targetShip);
+            }
+        }
+        else
+        {
+            throw new WrongMovementError();
+        }
     }
     private void MoveDown(IShip targetShip)
     {
         if(targetShip.EndPoint.Y == 9) return;
-        targetShip.StartPoint.Y--;
-        targetShip.EndPoint.Y--;
+        
+        
+        if(targetShip.Direction == EShipDirection.VerticalDown)
+        {
+            targetShip.StartPoint.Y++;
+            targetShip.EndPoint.Y++;
+        }
+
+        if (targetShip.Direction == EShipDirection.VerticalUp)
+        {
+            targetShip.StartPoint.Y--;
+            targetShip.EndPoint.Y--;
+        }
+
+        if(targetShip.StartPoint.X != 1 )
+        {
+            if (targetShip.Direction == EShipDirection.HorizontalRight)
+            {
+                TurnRight(targetShip);
+            }
+
+            if (targetShip.Direction == EShipDirection.HorizontalLeft)
+            {
+                TurnLeft(targetShip);
+            }
+        }
+        else
+        {
+            throw new WrongMovementError();
+        }
     }
+
+    private void TurnLeft(IShip targetShip)
+    {
+        targetShip.StartPoint = new Point((int)Math.Round((double)(targetShip.StartPoint.X + targetShip.turningThreshhold)/2)-1,
+            (targetShip.StartPoint.Y - targetShip.turningThreshhold)-1);
+        targetShip.EndPoint = new Point( (int)Math.Round((double)(targetShip.EndPoint.X - targetShip.turningThreshhold)/2), (int)Math.Round((double)(targetShip.EndPoint.Y + targetShip.turningThreshhold)/2));
+    
+    }
+    private void TurnRight(IShip targetShip)
+    {
+        targetShip.StartPoint = new Point((int)Math.Round((double)(targetShip.StartPoint.X - targetShip.turningThreshhold)/2)-1,
+            (targetShip.StartPoint.Y + targetShip.turningThreshhold)-1);
+        targetShip.EndPoint = new Point( (int)Math.Round((double)(targetShip.EndPoint.X + targetShip.turningThreshhold)/2), (int)Math.Round((double)(targetShip.EndPoint.Y - targetShip.turningThreshhold)/2));
+    }
+    
     private void ChangeActivePlayer()
     {
         ActivePlayer =  GetInactivePlayer();

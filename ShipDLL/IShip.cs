@@ -10,6 +10,8 @@ public interface IShip
     public Point StartPoint { get; set; }
     public Point EndPoint { get; set; }
     public IAbility Ability { get; set; }
+    public Point MiddlePoint { get; set; }
+    public int turningThreshhold { get; set; }
     public int UpdateHP();
     
     public List<ShipPart> ShipParts { get; set; }

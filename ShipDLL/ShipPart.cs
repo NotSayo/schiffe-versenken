@@ -2,6 +2,7 @@
 
 public class ShipPart
 {
+    public Point Position { get; set; }
     public IShip Parent { get; set; }
     public int NumberInSequence { get; set; }
     public bool IsAlive { get; set; }

@@ -16,7 +16,15 @@
         <div class="ModalDescription">@game.Modal.Description</div>
         <div class="ModalExtraInformations">@game.Modal.ExtraInformations</div>
         <div class="ModalButtons">
-            <button class="ModalConfirm">Confirm</button>
+            @if (game.Modal.Buttons == EModalButtons.Confirm)
+            {
+                <button class="ModalConfirm" @onclick="() => ModalConfirm()">Confirm</button>
+            }
+            else if (game.Modal.Buttons == EModalButtons.YesNo)
+            {
+                <button class="ModalYes" @onclick='() => ModalYesNo("yes")'>Yes</button>
+                <button class="ModalNo" @onclick='() => ModalYesNo("no")'>No</button>
+            }
         </div>
     </div>
 </div>
@@ -84,8 +92,8 @@
                     {
                         <span>Accept Draw</span>
                     }
-                </button> <!-- TODO Backend -->
-                <button class="Stats_surrender">Surrender</button>
+                </button> 
+                <button class="Stats_surrender" @onclick="() => Surrender(game.Players[0])">Surrender</button>
             </div>
         }
         <div class="activePlayer"></div>
@@ -152,8 +160,8 @@
                    {
                        <span>Accept Draw</span>
                    }
-                               </button> <!-- TODO Backend -->
-                <button class="Stats_surrender">Surrender</button>
+                               </button> 
+                <button class="Stats_surrender" @onclick="() => Surrender(game.Players[1])">Surrender</button>
             </div>
         }
     </div>
@@ -245,6 +253,7 @@
     public List<Point> SelectedPoints { get; set; }
     public IShip ActiveShip { get; set; }
     public IPlayer DrawRequestedBy { get; set; }
+    private IPlayer SurrenderRequest { get; set; }
 
     public bool ShowMyFieldPlayer1
     {
@@ -362,6 +371,8 @@
 
     private void RequestDraw(IPlayer player)
     {
+        if(game.GamePhase != EPhase.Playing && game.GamePhase != EPhase.PlacingShips)
+            return;
         if (DrawRequestedBy == null)
         {
             DrawRequestedBy = player;
@@ -372,10 +383,35 @@
         game.Draw();
         DrawRequestedBy = null;
     }
-    
-    public void Draw()
+
+    private void Surrender(IPlayer player)
     {
-        
+        if(game.GamePhase != EPhase.Playing && game.GamePhase != EPhase.PlacingShips)
+            return;
+        SurrenderRequest = player;
+        game.DisplayModal("Surrender", "Are you sure you want to surrender?", "You will lose the game!","", true, EModalButtons.YesNo);
+    }
+    
+
+    public void ModalConfirm()
+    {
+        if(game.GamePhase == EPhase.GameOver)
+            game.EndGame();
+        game.Modal.isVisible = false;
+    }
+
+    public void ModalYesNo(string reply)
+    {
+        if (reply == "yes")
+        {
+            game.Surrender(SurrenderRequest);
+        }
+
+        else if (reply == "no")
+        {
+            game.Modal = new ModalData();
+            SurrenderRequest = null;
+        }
     }
     
 }

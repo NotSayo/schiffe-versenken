@@ -206,6 +206,7 @@ input:checked + .slider:before {
     display: grid;
     justify-content: center;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
 }
 
 .ModalTitle {
@@ -216,6 +217,34 @@ input:checked + .slider:before {
 #ModalMessageBox > * {
     justify-self: center;
     align-self: center;
+    grid-column: 1 / span 2;
+}
+
+.ModalButtons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    justify-content: center;
+}
+
+.ModalYes {
+    grid-column: 1 / span 1;
+    width: 30%;
+    justify-self: center;
+    margin-left: 10%;
+}
+
+.ModalNo {
+    grid-column: 2 / span 1;
+    width: 30%;
+    justify-self: center;
+    margin-right: 10%;
+}
+
+.ModalConfirm {
+    grid-column: 1 / span 2;
+    width: 30%;
+    justify-self: center;
 }
 
 

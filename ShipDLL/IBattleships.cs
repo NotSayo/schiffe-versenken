@@ -6,11 +6,11 @@ public interface IBattleships
     public List<IPlayer> Players { get; set; }
     public IPlayer ActivePlayer { get; }
     public EPhase GamePhase { get; set; }
+    public ModalData Modal { get; set; }
     
     public bool ShowMyField(IPlayer player);
     
     public void CreateGame();
-    public bool GameOver(); 
     public bool SetShip(IShip ship, Point startPoint ,Point endPoint);
     public void ChangeTurns();
     public bool StartPlacingShips();
@@ -18,11 +18,10 @@ public interface IBattleships
     public bool Attack(Point point);
     public void EndGame();
     public bool CheckGameOver();
+    public void DisplayModal(string title, string lead, string desc, string extraInfo, bool isVisible, EModalButtons buttons);
     public void GameOver(IPlayer player);
-    
-    public ModalData Modal { get; set; }
 
-    public void Surrender();
+    public void Surrender(IPlayer player);
 
     public void Draw();
 }

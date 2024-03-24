@@ -9,6 +9,7 @@ public class ModalData
     public string Description { get; set; }
     public string ExtraInformations { get; set; }
     public bool isVisible { get; set; }
+    public EModalButtons Buttons { get; set; }
 
     public ModalData()
     {
@@ -17,14 +18,16 @@ public class ModalData
         Description = "";
         ExtraInformations = "";
         isVisible = false;
+        Buttons = EModalButtons.Confirm;
     }
     
-    public ModalData(string title, string lead, string description, string extraInformations)
+    public ModalData(string title, string lead, string description, string extraInformations, EModalButtons buttons)
     {
         Title = title;
         Lead = lead;
         Description = description;
         ExtraInformations = extraInformations;
+        Buttons = buttons;
     }
     
     public void HideModal()  => isVisible = false;

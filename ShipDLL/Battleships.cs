@@ -16,6 +16,7 @@ public class Battleships :IBattleships
         Modal = new ModalData();
         GeneratePlayers();
         CreateGame();
+        Result = EResult.Playing;
     }
     
     public void CreateGame()
@@ -23,6 +24,7 @@ public class Battleships :IBattleships
         GamePhase = EPhase.NotStarted;
         Result = EResult.Draw;
         ActivePlayer = Players[0];
+        Round = 0;
     }
     
     public void StartGame()
@@ -52,6 +54,7 @@ public class Battleships :IBattleships
     public void GameOver(IPlayer player)
     {
         GamePhase = EPhase.GameOver;
+        GetWonPlayer();
         DisplayModal("Game Over!", "Player " + player.ID + " has won!", "Click \"Confirm\" to play again!", "", true);
     }
     

@@ -458,9 +458,9 @@
     public async Task UpdateScoreAfterSurrender()
     {
         if(SurrenderRequest == game.Players[0])
-            await SetLocalScore((Score.Item1 + 1).ToString(), Score.Item2.ToString());
-        else
             await SetLocalScore(Score.Item1.ToString(), (Score.Item2 + 1).ToString());
+        else
+            await SetLocalScore((Score.Item1 + 1).ToString(), Score.Item2.ToString());
         Score = await GetLocalScore();
     }
 

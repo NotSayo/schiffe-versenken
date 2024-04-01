@@ -168,71 +168,77 @@
         }
     </div>
     
-     <div id="MainBoard">
-            <div class="FieldEntry">
-                 @if (game.ActivePlayer == game.Players[1] && ShowMyFieldPlayer2)
+    <div id="MainBoard">
+        <div class="FieldNamePlayer2">
+             <h2 class="FieldNameTitle">Player 2's Field:</h2>
+        </div>
+         <div class="FieldEntry">
+             @if (game.ActivePlayer == game.Players[1] && ShowMyFieldPlayer2)
+             {
+                 @for (int i = 0; i < 100; i++)
                  {
-                     @for (int i = 0; i < 100; i++)
-                     {
-                         var tempint2 = i;
-                         <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[1].Field.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 2)">
+                     var tempint2 = i;
+                     <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[1].Field.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 2)">
                          
-                             @if (game.Players[1].Field.FieldArr[tempint2].ShipPart != null)
-                             {
-                                 var j = game.Players[1].Field.FieldArr[tempint2].ShipPart.NumberInSequence;
-                                 <img class="PlacedShip Placed @((game.Players[1].Field.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[1].Field.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
-                             }
-                         </div></a>
-                     }
+                         @if (game.Players[1].Field.FieldArr[tempint2].ShipPart != null)
+                         {
+                             var j = game.Players[1].Field.FieldArr[tempint2].ShipPart.NumberInSequence;
+                             <img class="PlacedShip Placed @((game.Players[1].Field.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[1].Field.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
+                         }
+                     </div></a>
                  }
-                 else
+             }
+             else
+             {
+                 @for (int i = 0; i < 100; i++)
                  {
-                     @for (int i = 0; i < 100; i++)
-                     {
-                         var tempint2 = i;
-                         <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[0].EnemyField.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 2)">
-                             @if (game.Players[0].EnemyField.FieldArr[tempint2].ShipPart != null)
-                             {
-                                 var j = game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.NumberInSequence;
-                                 <img class="PlacedShip Placed @((game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
-                             }
-                         </div></a>
-                     }
+                     var tempint2 = i;
+                     <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[0].EnemyField.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 2)">
+                         @if (game.Players[0].EnemyField.FieldArr[tempint2].ShipPart != null)
+                         {
+                             var j = game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.NumberInSequence;
+                             <img class="PlacedShip Placed @((game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
+                         }
+                     </div></a>
                  }
+             }
                  
-            </div>
-            <div class="FieldEntry">
-                @if (game.ActivePlayer == game.Players[0] && ShowMyFieldPlayer1)
+         </div>
+         <div class="FieldNamePlayer1">
+              <h2 class="FieldNameTitle">Player 1's Field:</h2>
+         </div>
+        <div class="FieldEntry">
+            @if (game.ActivePlayer == game.Players[0] && ShowMyFieldPlayer1)
+            {
+                @for (int i = 0; i < 100; i++)
                 {
-                    @for (int i = 0; i < 100; i++)
-                    {
-                        var tempint2 = i;
-                        <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[0].Field.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 1)">
-                         
-                            @if (game.Players[0].Field.FieldArr[tempint2].ShipPart != null)
+                    var tempint2 = i;
+                    <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[0].Field.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 1)">
+                     
+                        @if (game.Players[0].Field.FieldArr[tempint2].ShipPart != null)
+                        {
+                            var j = game.Players[0].Field.FieldArr[tempint2].ShipPart.NumberInSequence;
+                            <img class="PlacedShip Placed @((game.Players[0].Field.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[0].Field.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
+                        }
+                    </div></a>
+                }
+            }
+            else
+            {
+                @for (int i = 0; i < 100; i++)
+                {
+                    var tempint2 = i;
+                    <a>
+                        <div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[1].EnemyField.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 1)">
+
+                            @if (game.Players[1].EnemyField.FieldArr[tempint2].ShipPart != null)
                             {
-                                var j = game.Players[0].Field.FieldArr[tempint2].ShipPart.NumberInSequence;
-                                <img class="PlacedShip Placed @((game.Players[0].Field.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[0].Field.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
+                                var j = game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.NumberInSequence;
+                                <img class="PlacedShip Placed @((game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
                             }
                         </div></a>
-                    }
                 }
-                else
-                {
-                    @for (int i = 0; i < 100; i++)
-                    {
-                        var tempint2 = i;
-                        <a>
-                            <div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[1].EnemyField.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 1)">
-    
-                                @if (game.Players[1].EnemyField.FieldArr[tempint2].ShipPart != null)
-                                {
-                                    var j = game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.NumberInSequence;
-                                    <img class="PlacedShip Placed @((game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
-                                }
-                            </div></a>
-                    }
-                }
+            }
             </div>
             <div id="controls">
                 <div class="controlsRound">Round: @game.Round</div>
@@ -247,7 +253,10 @@
                 }
                 else
                 {
-                    <div>Score: @Score.Item1.ToString() : @Score.Item2.ToString()</div>
+                    <div class="controls_Score">
+                        <div>Score: @Score.Item1.ToString() : @Score.Item2.ToString()</div>
+                        <button class="Reset_Score" @onclick="() => ResetLocalScore()">Reset</button>
+                    </div>
                 }
             </div>
         </div>  
@@ -327,7 +336,6 @@
             if(game.ActivePlayer.ID != PlayerID)
                 return;
             var result = EnterPoint(field);
-            Console.WriteLine("here");
             if (result == -1 || result == 0)
                 return;
             bool placingResult = game.SetShip(ActiveShip, SelectedPoints[0], SelectedPoints[1]);
@@ -353,7 +361,6 @@
             SelectedPoints = new List<Point>();
         if (SelectedPoints.Count == 2)
         {
-            Console.WriteLine(SelectedPoints[0] + " " + SelectedPoints[1]);
             SelectedPoints = new List<Point>();
         }
         
@@ -465,6 +472,12 @@
             await SetLocalScore((Score.Item1 + 1).ToString(), Score.Item2.ToString());
         else
             await SetLocalScore(Score.Item1.ToString(), (Score.Item2 + 1).ToString());
+        Score = await GetLocalScore();
+    }
+
+    public async Task ResetLocalScore()
+    {
+        await SetLocalScore("0", "0");
         Score = await GetLocalScore();
     }
 

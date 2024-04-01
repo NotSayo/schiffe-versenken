@@ -23,7 +23,8 @@
     height: auto;
     width: 100%;
     display: grid;
-    grid-template-rows: 1fr 1fr 0.3fr;
+    grid-template-rows:  1fr 1fr 0.3fr;
+    grid-template-columns:  1fr 6fr 1fr;
     border-left: black solid 1px;
     border-right: black solid 1px;
 }
@@ -42,6 +43,47 @@
     z-index: -1;
 }
 
+.FieldNamePlayer1 {
+    display: flex;
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    justify-content: flex-end;
+}
+
+.FieldNamePlayer1 > h2 {
+    writing-mode: vertical-rl;
+    text-orientation: sideways;
+    justify-self: center;
+    align-self: center;
+    margin: 0;
+    transform: rotate(-180deg);
+}
+
+.FieldNamePlayer2 {
+    display: flex;
+    grid-column: 3;
+    grid-row: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.FieldNamePlayer2 > h2 {
+    writing-mode: vertical-rl;
+    text-orientation: sideways;
+    justify-self: center;
+    align-self: center;
+    margin: 0;
+}
+
+.FieldNameTitle {
+    color: gold;
+    text-shadow: 0 0 7px black;
+    font-weight: bold;
+}
+
 
 
 .FieldEntry {
@@ -49,6 +91,7 @@
     height: 90%;
     align-self: center;
     justify-self: center;
+    grid-column: 2;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -70,6 +113,7 @@
 
 #controls {
     grid-row: 3;
+    grid-column: 2;
     width: 100%;
     height: 100%;
     display: grid;
@@ -77,8 +121,9 @@
     grid-template-rows: 1fr 1fr ;
     /*background: url("Img/panel.png");*/
     /*border-top: 2px solid black; */
-    padding: 0 5% 0 5% ;
+    padding: 0 2% 0 2% ;
     justify-content: center;
+    margin: 0;
 }
 
 #controls > * , .controls_buttons > *{
@@ -105,6 +150,22 @@
 .controls_buttons > button:disabled {
     background: rgb(236,72,72);
     background: linear-gradient(267deg, rgba(236,72,72,0.5) 0%, rgba(0,206,255,0.5) 100%);
+}
+
+.controls_Score {
+    display: grid;
+    grid-template-columns: 73% 3% auto;
+}
+
+.Reset_Score {
+    grid-column: 3;
+    width: 100%;
+    height: fit-content;
+    font-size: 14px;
+    justify-self: center;
+    margin-top:10% ;
+    background-color: lightcoral;   
+    font-weight: bold;
 }
 
 

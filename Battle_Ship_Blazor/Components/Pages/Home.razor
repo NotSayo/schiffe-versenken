@@ -1,0 +1,487 @@
+﻿@page "/"
+@using ShipDLL
+@using System.ComponentModel.Design
+@using System.Net.Sockets
+@using System.Runtime.CompilerServices
+@using Blazored.LocalStorage.StorageOptions
+@using Microsoft.AspNetCore.Mvc.ModelBinding.Binders
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@rendermode RenderMode.InteractiveServer
+@attribute [StreamRendering]
+
+<PageTitle>Play Battle Ships</PageTitle>
+
+<div id="ModalContainer" class="@(game.Modal.isVisible ? "visible" : "notVisible")">
+    <div id="ModalMessageBox">
+        <h2 class="ModalTitle">@game.Modal.Title</h2>
+        <div class="ModalLead">@game.Modal.Lead</div>
+        <div class="ModalDescription">@game.Modal.Description</div>
+        <div class="ModalExtraInformations">@game.Modal.ExtraInformations</div>
+        <div class="ModalButtons">
+            @if (game.Modal.Buttons == EModalButtons.Confirm)
+            {
+                <button class="ModalConfirm" @onclick="() => ModalConfirm()">Confirm</button>
+            }
+            else if (game.Modal.Buttons == EModalButtons.YesNo)
+            {
+                <button class="ModalYes" @onclick='() => ModalYesNo("yes")'>Yes</button>
+                <button class="ModalNo" @onclick='() => ModalYesNo("no")'>No</button>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="" id="main_Window">
+    @* <h1>Battle Ships</h1> *@
+    <div id="Player1Stats" class="Player_stats player1Field @(game.ActivePlayer == game.Players[0] ? "activePlayer1" : "")">  
+        <h2>Player 1</h2>
+        @if(game.GamePhase == EPhase.PlacingShips && game.ActivePlayer == game.Players[0])
+        {
+            <div class="ShipsLayout">
+                @foreach (var ship in game.Players[0].UnplacedShips)
+                {
+                    <div class="Placing_Ship">
+                        <img @onclick="() => PlaceShip(ship.Type)" class="@(ship == ActiveShip ? "activeShip":"")" src="./Img/@(ship.Type).png"/>
+                        <div>@ship.Type , @((int)@ship.Type)HP</div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Left HP:</div>
+                <div class="Stats_Stat"> @game.Players[0].Field.LeftHP</div> 
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Left Ships:</div> 
+                <div class="Stats_Stat"> @game.Players[0].Field.LeftShips</div> 
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Attacks:</div>
+                <div class="Stats_Stat">@GetAttacks(game.Players[0])</div> 
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Misses:</div> 
+                <div class="Stats_Stat">@GetMisses(game.Players[0]) </div> 
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Hits:</div> 
+                <div class="Stats_Stat">@GetHits(game.Players[0])</div> 
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Hit-Percent:</div> 
+                <div class="Stats_Stat">@GetHitPercent(game.Players[0])%</div> 
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Show Field</div>
+                <label class="switch Stats_Stat">
+                    <input @bind="ShowMyFieldPlayer1" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+            </div> 
+            <div class="Stats_Buttons">
+                <button class="Stats_draw" @onclick="() => RequestDraw(game.Players[0])">
+                    @if (DrawRequestedBy == null)
+                    {
+                        <span>Request Draw</span>
+                    }
+                    else if (DrawRequestedBy == game.Players[0])
+                    {
+                        <span>Draw Requested!</span>
+                    }
+                    else if(DrawRequestedBy == game.Players[1])
+                    {
+                        <span>Accept Draw</span>
+                    }
+                </button> 
+                <button class="Stats_surrender" @onclick="() => Surrender(game.Players[0])">Surrender</button>
+            </div>
+        }
+        <div class="activePlayer"></div>
+    </div>
+    
+    <div id="Player2Stats" class="Player_stats player2Field  @(game.ActivePlayer == game.Players[1] ? "activePlayer2" : "")">
+    <h2>Player 2</h2>
+        @if(game.GamePhase == EPhase.PlacingShips && game.ActivePlayer == game.Players[1])
+        {
+            <div class="ShipsLayout">
+                @foreach (var ship in game.Players[1].UnplacedShips)
+                {
+                    <div class="Placing_Ship">
+                        <img @onclick="() => PlaceShip(ship.Type)" class="@(ship == ActiveShip ? "activeShip":"")" src="./Img/@(ship.Type).png"/>
+                        <div>@ship.Type , @((int)@ship.Type)HP</div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Left HP:</div>
+                <div class="Stats_Stat"> @game.Players[1].Field.LeftHP</div> 
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Left Ships:</div> 
+                <div class="Stats_Stat"> @game.Players[1].Field.LeftShips</div> 
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Attacks:</div> 
+                <div class="Stats_Stat">@GetAttacks(game.Players[1])</div> 
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Misses:</div>
+                <div class="Stats_Stat">@GetMisses(game.Players[1]) </div> 
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Hits:</div> 
+                <div class="Stats_Stat">@GetHits(game.Players[1])</div> 
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Hit-Percent:</div> 
+                <div class="Stats_Stat">@GetHitPercent(game.Players[1])%</div> 
+            </div>
+            <div class="Stats_Entry">
+                <div class="Stats_Text">Show Field</div>
+                <label class="switch Stats_Stat">
+                    <input @bind="ShowMyFieldPlayer2" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <div class="Stats_Buttons">
+               <button class="Stats_draw" @onclick="() => RequestDraw(game.Players[1])">
+                   @if (DrawRequestedBy == null)
+                   {
+                       <span>Request Draw</span>
+                   }
+                   else if (DrawRequestedBy == game.Players[1])
+                   {
+                       <span>Draw Requested!</span>
+                   }
+                   else if(DrawRequestedBy == game.Players[0])
+                   {
+                       <span>Accept Draw</span>
+                   }
+                               </button> 
+                <button class="Stats_surrender" @onclick="() => Surrender(game.Players[1])">Surrender</button>
+            </div>
+        }
+    </div>
+    
+    <div id="MainBoard">
+        <div class="FieldNamePlayer2">
+             <h2 class="FieldNameTitle">Player 2's Field:</h2>
+        </div>
+         <div class="FieldEntry">
+             @if (game.ActivePlayer == game.Players[1] && ShowMyFieldPlayer2)
+             {
+                 @for (int i = 0; i < 100; i++)
+                 {
+                     var tempint2 = i;
+                     <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[1].Field.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 2)">
+                         
+                         @if (game.Players[1].Field.FieldArr[tempint2].ShipPart != null)
+                         {
+                             var j = game.Players[1].Field.FieldArr[tempint2].ShipPart.NumberInSequence;
+                             <img class="PlacedShip Placed @((game.Players[1].Field.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[1].Field.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
+                         }
+                     </div></a>
+                 }
+             }
+             else
+             {
+                 @for (int i = 0; i < 100; i++)
+                 {
+                     var tempint2 = i;
+                     <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[0].EnemyField.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 2)">
+                         @if (game.Players[0].EnemyField.FieldArr[tempint2].ShipPart != null)
+                         {
+                             var j = game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.NumberInSequence;
+                             <img class="PlacedShip Placed @((game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[0].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
+                         }
+                     </div></a>
+                 }
+             }
+                 
+         </div>
+         <div class="FieldNamePlayer1">
+              <h2 class="FieldNameTitle">Player 1's Field:</h2>
+         </div>
+        <div class="FieldEntry">
+            @if (game.ActivePlayer == game.Players[0] && ShowMyFieldPlayer1)
+            {
+                @for (int i = 0; i < 100; i++)
+                {
+                    var tempint2 = i;
+                    <a><div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[0].Field.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 1)">
+                     
+                        @if (game.Players[0].Field.FieldArr[tempint2].ShipPart != null)
+                        {
+                            var j = game.Players[0].Field.FieldArr[tempint2].ShipPart.NumberInSequence;
+                            <img class="PlacedShip Placed @((game.Players[0].Field.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[0].Field.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
+                        }
+                    </div></a>
+                }
+            }
+            else
+            {
+                @for (int i = 0; i < 100; i++)
+                {
+                    var tempint2 = i;
+                    <a>
+                        <div class="FieldPoint @CheckIfClicked(tempint2) background@(game.Players[1].EnemyField.FieldArr[tempint2].Status)" @onclick="() => FieldClicked(tempint2, 1)">
+
+                            @if (game.Players[1].EnemyField.FieldArr[tempint2].ShipPart != null)
+                            {
+                                var j = game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.NumberInSequence;
+                                <img class="PlacedShip Placed @((game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type) + "" + j)" src="Img/@(game.Players[1].EnemyField.FieldArr[tempint2].ShipPart.Parent.Type).png"/>
+                            }
+                        </div></a>
+                }
+            }
+            </div>
+            <div id="controls">
+                <div class="controlsRound">Round: @game.Round</div>
+                <div class="controlsActivePlayer">Active Player: @game.ActivePlayer.ID</div>
+                <div class="controls_buttons">
+                    <button class="Stats_draw" @onclick="StartGame"  disabled="@(game.GamePhase != EPhase.NotStarted)">Start the Game</button>
+                    @* <button @onclick="game.ChangeTurns">Change Turn</button> *@ <!-- DEBUGGINIG ONLY -->
+                </div>
+                @if (Score == null)
+                {
+                    <div> Loading Score</div>
+                }
+                else
+                {
+                    <div class="controls_Score">
+                        <div>Score: @Score.Item1.ToString() : @Score.Item2.ToString()</div>
+                        <button class="Reset_Score" @onclick="() => ResetLocalScore()">Reset</button>
+                    </div>
+                }
+            </div>
+        </div>  
+    </div>
+
+
+
+
+@code {
+    private Battleships game { get; set; } = new Battleships();
+    public List<Point> SelectedPoints { get; set; }
+    public IShip ActiveShip { get; set; }
+    public IPlayer DrawRequestedBy { get; set; }
+    private IPlayer SurrenderRequest { get; set; }
+    private Tuple<int, int> score;
+
+    public Tuple<int, int> Score
+    {
+        get => score;
+        set
+        {
+            score = value;
+            StateHasChanged();
+        }
+    }
+
+    protected async override void OnInitialized()
+    {
+        game = new Battleships();
+        game.CreateGame();
+        SelectedPoints = new List<Point>();
+        DrawRequestedBy = null;
+        Score = await GetLocalScore();
+    }
+    
+    public bool ShowMyFieldPlayer1
+    {
+        get => game.Players[0].ShowMyField;
+        set => value = game.ShowMyField(game.Players[0]);
+    }
+
+    public bool ShowMyFieldPlayer2
+    {
+        get => game.Players[1].ShowMyField;
+        set => value = game.ShowMyField(game.Players[1]);
+    }
+
+    public void StartGame()
+    {
+        game.StartPlacingShips();
+    }
+
+    public void PlaceShip(EShip shipType)
+    {
+        if (game.GamePhase != EPhase.PlacingShips)
+            return;
+        if (ActiveShip == null)
+        {
+            ActiveShip = game.ActivePlayer.UnplacedShips.Where(s => s.Type == shipType).FirstOrDefault();
+            return;
+        }
+
+        if (ActiveShip.Type != shipType)
+        {
+            ActiveShip = game.ActivePlayer.UnplacedShips.Where(s => s.Type == shipType).FirstOrDefault();
+            return;
+        }
+        ActiveShip = null;
+        
+    }
+    
+
+    public void FieldClicked(int field, int PlayerID)
+    {
+        if (game.GamePhase == EPhase.PlacingShips)
+        {
+            if(game.ActivePlayer.ID != PlayerID)
+                return;
+            var result = EnterPoint(field);
+            if (result == -1 || result == 0)
+                return;
+            bool placingResult = game.SetShip(ActiveShip, SelectedPoints[0], SelectedPoints[1]);
+            SelectedPoints = new List<Point>();
+            
+        }
+        else if (game.GamePhase == EPhase.Playing)
+        {
+            if (game.ActivePlayer.ID == PlayerID)
+                return;
+            var result = game.Attack(new Point(field % 10, (int)field / 10));
+            if (game.Result != EResult.Playing)
+                UpdateScoreAfterWin();
+        }
+    }
+    
+
+    private int EnterPoint(int field)
+    {
+        if (game.GamePhase != EPhase.PlacingShips || ActiveShip == null)
+            return -1;
+        if (SelectedPoints == null)
+            SelectedPoints = new List<Point>();
+        if (SelectedPoints.Count == 2)
+        {
+            SelectedPoints = new List<Point>();
+        }
+        
+        Point p = new Point(field % 10,(int)Math.Floor((double)field / 10));
+        SelectedPoints.Add(p);
+
+        if (SelectedPoints.Count == 2)
+            return 1;
+        
+        return 0;
+    }
+
+    private string CheckIfClicked(int field)
+    {
+        if (SelectedPoints.Count == 0)
+            return "";
+        if (SelectedPoints[0].GetIndex() == field)
+            return "clickedField";
+        return "";
+    }
+
+    private int GetAttacks(IPlayer player) => player.EnemyField.FieldArr.ToList().Where(p => p.Status != EPositionStatus.Empty && p.Status != EPositionStatus.Ship).Count();
+
+    private int GetMisses(IPlayer player) => player.EnemyField.FieldArr.ToList().Where(p => p.Status == EPositionStatus.Miss).Count();
+
+    private int GetHits(IPlayer player) => player.EnemyField.FieldArr.ToList().Where(p => p.Status == EPositionStatus.Hit).Count();
+
+    private double GetHitPercent(IPlayer player)
+    {
+        if (GetAttacks(player) == 0)
+            return 0;
+        return Math.Round((double)GetHits(player) / GetAttacks(player) * 100, 2);
+
+    }
+
+    private void RequestDraw(IPlayer player)
+    {
+        if(game.GamePhase != EPhase.Playing && game.GamePhase != EPhase.PlacingShips)
+            return;
+        if (DrawRequestedBy == null)
+        {
+            DrawRequestedBy = player;
+            return;
+        }
+        if (DrawRequestedBy == player)
+            return;
+        game.Draw();
+        DrawRequestedBy = null;
+    }
+
+    private void Surrender(IPlayer player)
+    {
+        if(game.GamePhase != EPhase.Playing && game.GamePhase != EPhase.PlacingShips)
+            return;
+        SurrenderRequest = player;
+        game.DisplayModal("Surrender", "Are you sure you want to surrender?", "You will lose the game!","", true, EModalButtons.YesNo);
+    }
+    
+
+    public void ModalConfirm()
+    {
+        if(game.GamePhase == EPhase.GameOver)
+            game.EndGame();
+        game.Modal.isVisible = false;
+    }
+
+    public void ModalYesNo(string reply)
+    {
+        if (reply == "yes")
+        {
+            UpdateScoreAfterSurrender();
+            game.Surrender(SurrenderRequest);
+        }
+
+        else if (reply == "no")
+        {
+            game.Modal = new ModalData();
+            SurrenderRequest = null;
+        }
+    }
+    
+    public async Task<Tuple<int,int>> GetLocalScore()
+    {
+        string? score = await GetScoreFromStorage();
+        if (string.IsNullOrEmpty(score))
+        {
+            await SetLocalScore("0", "0");
+            return new Tuple<int, int>(0, 0);
+        }
+        score = score.Replace("\"", "");
+        var scores = score.Split(':');
+        return new Tuple<int, int>(int.Parse(scores[0]), int.Parse(scores[1]));
+    }
+
+    public async Task UpdateScoreAfterSurrender()
+    {
+        if(SurrenderRequest == game.Players[0])
+            await SetLocalScore((Score.Item1 + 1).ToString(), Score.Item2.ToString());
+        else
+            await SetLocalScore(Score.Item1.ToString(), (Score.Item2 + 1).ToString());
+        Score = await GetLocalScore();
+    }
+
+    public async Task UpdateScoreAfterWin()
+    {
+        if (game.Result == EResult.Draw)
+            return;
+        if (game.Result == EResult.Player1Win)
+            await SetLocalScore((Score.Item1 + 1).ToString(), Score.Item2.ToString());
+        else
+            await SetLocalScore(Score.Item1.ToString(), (Score.Item2 + 1).ToString());
+        Score = await GetLocalScore();
+    }
+
+    public async Task ResetLocalScore()
+    {
+        await SetLocalScore("0", "0");
+        Score = await GetLocalScore();
+    }
+
+    private async Task<string> GetScoreFromStorage() => await LocalStorage.GetItemAsStringAsync("score");
+
+    private async Task SetLocalScore(string score1, string score2) => await LocalStorage.SetItemAsync("score", $"{score1}:{score2}");
+}

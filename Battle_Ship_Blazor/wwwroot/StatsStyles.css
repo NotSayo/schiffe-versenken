@@ -1,0 +1,142 @@
+﻿#Player1Stats {
+    grid-row: 1;
+    grid-column: 1;
+}
+
+#Player2Stats {
+    grid-row: 1;
+    grid-column: 3;
+}
+
+.Player_stats {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    width: 100%;
+    height: 100%;
+    padding: 5%;
+    justify-self: center;
+    align-self: center;
+    background: #0a53be;
+}
+
+.Stats_Entry {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-content: center;
+    /*background-color: rgba(50,50,50,0.33);*/
+    text-shadow: 4px 4px 4px black;
+}
+
+.Player_stats > h2 {
+    grid-row: 1;
+    justify-self: center;
+    font-weight: bolder;
+    font-size: 40px;    
+    color: #110c78;
+    text-shadow: 2px 3px 3px whitesmoke;
+}
+
+.Stats_Entry > * {
+    font-size:25px ;
+    font-weight: bold;
+    color: white;
+}
+
+.Stats_Entry > .Stats_Text {
+    justify-self: right;
+    padding-left: 20%;
+    text-align: right;
+    width: 100%;
+    height: 100%;
+}
+
+.Stats_Entry > .Stats_Stat {
+    justify-self: center;
+}
+
+.Stats_Buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-self: center;
+}
+
+.Stats_Buttons > * {
+    width: 75%;
+    height: 100%;
+    padding:4%;
+    min-width: fit-content;
+    min-height: fit-content;
+}
+
+.Stats_draw {
+    justify-self: left;
+}
+
+.Stats_surrender {
+    justify-self: right;
+}
+
+.ShipsLayout {
+    grid-row: 2 / span all;
+    grid-column: 1 / span all;
+    background-color: rgba(50,50,50,0.75);
+    color: white;
+}
+
+.ShipsLayout {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr ;
+}
+
+.Placing_Ship {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    justify-items: center;
+    justify-self: center;
+    text-shadow: 2px 2px 2px black;
+}
+
+.Placing_Ship > img {
+    width: 75%;
+}
+
+.Placing_Ship > div {
+    font-size: 25px ;
+    font-family: "Lucida Bright";
+    justify-self: center;
+}
+
+.player1Field {
+    background-image: linear-gradient(0deg, rgba(50,50,50,0.4) 100%, rgba(50,50,50,0.4)),url("Img/blue_captain.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-x: left;
+}
+
+.player2Field {
+    background-image: linear-gradient(0deg, rgba(50,50,50,0.4) 100%, rgba(50,50,50,0.4)),url("Img/red_captain.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.activePlayer1 {
+    background-image: linear-gradient(0deg, rgba(97,86,67,0.33) 90%, rgba(255,255,0,0.75)), url("Img/blue_captain.png");
+    color: yellow;
+    
+}
+
+.activePlayer2 {
+    background-image: linear-gradient(0deg, rgba(97,86,67,0.33) 90%, rgba(255,255,0,0.75)), url("Img/red_captain.png");
+    color: yellow;
+}
+
+.activeShip {
+    border: yellow 2px dotted;
+}
+
+
+
+
+
+
+

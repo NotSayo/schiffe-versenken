@@ -1,4 +1,5 @@
 using Battle_Ship_Blazor.Components;
+using Blazored.LocalStorage;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddBlazoredLocalStorage();
 
    
 

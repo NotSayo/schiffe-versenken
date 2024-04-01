@@ -13,4 +13,6 @@ public interface IPlayer
     public void CreateField();
     public bool HasMoved { get; set; }
     public bool SetShip(IShip ship, List<Point> points);
+
+    public bool ShowMyField { get; set; }
 }

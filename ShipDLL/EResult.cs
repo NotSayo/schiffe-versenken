@@ -4,5 +4,6 @@ public enum EResult
 {
     Player1Win,
     Player2Win,
-    Draw
+    Draw,
+    Playing
 }

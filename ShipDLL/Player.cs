@@ -11,12 +11,16 @@ public class Player:IPlayer
     public bool HasWon { get; set; }
     public bool AcceptDraw { get; set; }
 
+
+    public bool ShowMyField { get; set; } = true;
+
     public Player()
     {
         UnplacedShips = new List<IShip>()
         {
             new Ship(EShip.Battleship), new Ship(EShip.GorlockTheDestroyer), new Ship(EShip.OceanGate_Submarine), new Ship(EShip.CruiseShip)
         };
+        UnplacedShips = UnplacedShips.OrderByDescending(s => (int)s.Type).ToList();
         HasWon = false; 
     }
 

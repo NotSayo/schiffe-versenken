@@ -30,7 +30,6 @@ public class Battleships :IBattleships
     {
         Players[0].CreateField();
         Players[1].CreateField();
-        
     }
     
 
@@ -137,7 +136,8 @@ public class Battleships :IBattleships
     }
     private void MoveLeft(IShip targetShip)
     {
-        if(targetShip.StartPoint.X == 0) return;
+        if(targetShip.StartPoint.X == 0) 
+            throw new WrongMovementError();
         
         if(targetShip.Direction == EShipDirection.HorizontalLeft)
         {
@@ -167,6 +167,7 @@ public class Battleships :IBattleships
         {
             throw new WrongMovementError();
         }
+        targetShip.Direction = EShipDirection.HorizontalLeft;
     }
     private void MoveRight(IShip targetShip)
     {
@@ -193,7 +194,7 @@ public class Battleships :IBattleships
             TurnLeft(targetShip);
         }
         
-            
+        targetShip.Direction = EShipDirection.HorizontalRight;
         
     }
     private void MoveUp(IShip targetShip)
@@ -228,6 +229,7 @@ public class Battleships :IBattleships
         {
             throw new WrongMovementError();
         }
+        targetShip.Direction = EShipDirection.VerticalUp;
     }
     private void MoveDown(IShip targetShip)
     {
@@ -251,17 +253,20 @@ public class Battleships :IBattleships
             if (targetShip.Direction == EShipDirection.HorizontalRight)
             {
                 TurnRight(targetShip);
+                
             }
 
             if (targetShip.Direction == EShipDirection.HorizontalLeft)
             {
                 TurnLeft(targetShip);
             }
+            
         }
         else
         {
             throw new WrongMovementError();
         }
+        targetShip.Direction = EShipDirection.VerticalDown;
     }
 
     private void TurnLeft(IShip targetShip)

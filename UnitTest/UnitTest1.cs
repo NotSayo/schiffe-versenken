@@ -218,6 +218,19 @@ public class Tests
     
 
     #endregion
+
+    #region MovementTests
+
+    [Test]
+    public void MoveDownTest()
+    {
+        _gameController.CreateGame();
+        _gameController.SetShip(new Ship(EShip.GorlockTheDestroyer), new Point(0,0), new Point(0,4));
+        _gameController.Move(new Point(1,0));
+        Assert.That(_gameController.ActivePlayer.Field.Ships[0].Positions[0].Y, Is.EqualTo(0));
+    }
+
+    #endregion
     
     
     

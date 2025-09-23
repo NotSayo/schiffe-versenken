@@ -153,7 +153,7 @@ public class Tests
     public void CheckSurrender()
     {
         _gameController.CreateGame();
-        _gameController.Surrender();
+        _gameController.Surrender(null);
         Assert.IsTrue(_gameController.GamePhase == EPhase.GameOver);
     }
 
@@ -204,7 +204,7 @@ public class Tests
     public void CheckSurrenderEndGame()
     {
         _gameController.CreateGame();
-        _gameController.Surrender();
+        _gameController.Surrender(null);
         Assert.IsFalse(_gameController.GamePhase == EPhase.Playing);
     }
 
